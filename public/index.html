@@ -1,11 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa">
 <head>
-  <meta charset="utf-8" />
-  <title>بنگاه معاملات خودرو</title>
+  <meta charset="UTF-8" />
+  <title>سامانه بنگاه خودرو</title>
+  <style>
+    body { font-family: sans-serif; direction: rtl; background:#f9f9f9; }
+    h1 { text-align:center; color:#333; }
+    table { width:90%; margin:20px auto; border-collapse: collapse; background:#fff; }
+    th, td { padding:10px; border:1px solid #ddd; text-align:center; }
+    th { background:#f2f2f2; }
+  </style>
 </head>
 <body>
-  <h1>سلام — این صفحهٔ استاتیکِ پروژه است</h1>
-  <p>برای دیدن API به <a href="/api/cars">/api/cars</a> بروید.</p>
+  <h1>🚗 لیست خودروها</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th><th>برند</th><th>مدل</th><th>سال</th><th>قیمت</th><th>وضعیت</th>
+      </tr>
+    </thead>
+    <tbody id="cars-body"><tr><td colspan="6">در حال بارگذاری...</td></tr></tbody>
+  </table>
+
+  <script>
+    async function loadCars() {
+      try {
+        const res = await fetch('/api/cars');
+        const cars = await res.json();
+        const tbody = document.getElementById('cars-body');
+        if (!cars.length) {
+          tbody.innerHTML = '<tr><td colspan="6">هیچ خودرویی ثبت نشده</td></tr>';
+          return;
+        }
+        tbody.innerHTML = cars.map(c => `
+          <tr>
+            <td>${c.id ?? ''}</td>
+            <td>${c.brand ?? ''}</td>
+            <td>${c.model ?? ''}</td>
+            <td>${c.year ?? ''}</td>
+            <td>${c.price ?? ''}</td>
+            <td>${c.status ?? ''}</td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        document.getElementById('cars-body').innerHTML =
+          '<tr><td colspan="6">❌ خطا در دریافت اطلاعات</td></tr>';
+        console.error(e);
+      }
+    }
+    loadCars();
+  </script>
 </body>
 </html>
