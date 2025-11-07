@@ -1,0 +1,255 @@
+/* تنظیمات عمومی و فونت */
+body {
+    direction: rtl;
+    font-family: 'Vazirmatn', sans-serif;
+    margin: 0;
+    padding-top: 60px; /* فضای خالی برای هدر ثابت */
+    color: #333;
+}
+
+/* Header Styling - ثابت کردن نوار بالایی و تنظیم فضا */
+.main-header {
+    display: flex;
+    justify-content: space-between; /* پخش شدن لوگو و منو */
+    align-items: center;
+    /* این بخش بدون تغییر است */
+    padding: 10px 40px; 
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+    /* *************** کد اصلاح شده *************** */
+    /* جابجایی کلی لوگو و منو (لوگو به چپ، منو به راست) */
+    flex-direction: row-reverse; 
+    /* ******************************************* */
+}
+    
+    /* ویژگی‌های ثابت کردن */
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000; 
+    box-sizing: border-box; /* بسیار مهم برای کنترل padding و عرض */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.main-nav {
+    display: flex;
+    gap: 15px; /* فاصله بین دکمه‌ها */
+    align-items: center;
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+    padding: 6px 10px; /* تنظیم padding برای جا شدن دکمه‌ها */
+    transition: background-color 0.3s;
+    border-radius: 5px;
+    white-space: nowrap; /* جلوگیری از شکستن دکمه فروش خودرو */
+}
+
+.nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* دکمه "فروش خودرو" */
+.button-like {
+    background-color: #f7931e; /* رنگ نارنجی */
+    border: 1px solid #f7931e;
+    color: white !important;
+    padding: 6px 15px;
+    font-weight: bold;
+}
+
+.button-like:hover {
+    background-color: #e5871b;
+}
+
+/* Hero Section Styling (بخش بالای صفحه) */
+.hero-section {
+    /* اطمینان حاصل کنید تصویر 1000029064.jpg در کنار فایل‌ها باشد */
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+                url('1000029064.jpg') no-repeat center center;
+    background-size: cover;
+    min-height: 85vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+}
+
+.content-box {
+    text-align: center;
+    color: white;
+    padding: 40px;
+    border-radius: 10px;
+    max-width: 500px;
+}
+
+.main-title { font-size: 48px; margin-bottom: 5px; font-weight: 700; }
+.subtitle { font-size: 30px; margin-top: 0; margin-bottom: 30px; font-weight: 400; }
+
+.orange-button {
+    background-color: #f7931e;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 40px;
+    transition: background-color 0.3s;
+}
+
+.features-list {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    padding-top: 20px;
+}
+
+.feature-item {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.feature-item p { margin: 5px 0 0; font-size: 14px; }
+.feature-item .icon { font-size: 24px; margin-bottom: 5px; }
+
+
+/* Why Sell Section Styling (بخش توضیحات) */
+.why-sell-section {
+    padding: 60px 40px;
+    background-color: #f9f9f9;
+    text-align: right;
+    display: flex;
+    justify-content: center;
+}
+
+.sell-content {
+    max-width: 900px;
+}
+
+.section-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #f7931e;
+    margin-bottom: 40px;
+}
+
+.sell-feature {
+    margin-bottom: 30px;
+    padding: 20px;
+    border-right: 4px solid #f7931e; 
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.feature-icon {
+    font-size: 24px;
+    float: right; 
+    margin-left: 15px;
+}
+
+.feature-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 0;
+}
+
+.sell-feature p {
+    margin-top: 10px;
+    color: #555;
+}
+
+
+/* Footer Styling (اطلاعات توسعه‌دهندگان) */
+.main-footer {
+    background-color: #333;
+    color: #ccc;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 14px;
+}
+.auth-page {
+  display:flex; justify-content:center; align-items:center;
+  min-height:100vh; background:#111; font-family:'Vazirmatn', sans-serif;
+}
+.auth-card {
+  background:#1e1e1e; color:#fff; width:320px; padding:28px;
+  border-radius:16px; box-shadow:0 10px 25px rgba(0,0,0,.35); text-align:center;
+}
+.auth-card input, .auth-card select {
+  width:100%; padding:10px; margin:8px 0;
+  border:1px solid #333; border-radius:8px; background:#0f0f0f; color:#fff;
+}
+.auth-card button {
+  width:100%; padding:10px; border:none; border-radius:8px;
+  background:#f7931e; color:#222; font-weight:bold; cursor:pointer; margin-top:6px;
+}
+.auth-card button:hover { background:#e5871b; }
+.auth-card a { color:#f7931e; text-decoration:none; font-size:14px; }
+#msg { min-height:20px; margin-top:8px; color:#ddd; }
+.cars-page {
+  padding: 80px 40px;
+  background: #f9f9f9;
+}
+
+.cars-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.car-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.car-card:hover {
+  transform: translateY(-5px);
+}
+
+.car-card h2 {
+  color: #f7931e;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.car-images {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.car-images img {
+  width: 100px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+

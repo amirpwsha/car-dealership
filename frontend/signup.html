@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>ثبت‌نام | خودرو۹۰</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+  <div class="auth-card">
+    <h1>ثبت‌نام</h1>
+    <form id="signup-form">
+      <input name="username" placeholder="نام کاربری" required>
+      <input name="email" type="email" placeholder="ایمیل" required>
+      <input name="password" type="password" placeholder="رمز عبور" required>
+      <select name="role">
+        <option value="customer">مشتری</option>
+        <option value="admin">مدیر</option>
+      </select>
+      <button type="submit">ثبت‌نام</button>
+    </form>
+    <p id="msg"></p>
+    <a href="login.html">حساب دارم → ورود</a>
+  </div>
+
+<script>
+document.getElementById('signup-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = e.target;
+  const payload = {
+    username: f.username.value,
+    email: f.email.value,
+    password: f.password.value,
+    role: f.role.value
+  };
+  const res = await fetch('/api/auth/signup', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  document.getElementById('msg').textContent = data.message || data.error;
+  if (res.ok) setTimeout(()=>location.href='login.html', 800);
+});
+</script>
+</body>
+</html>
