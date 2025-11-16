@@ -4,6 +4,7 @@ const path = require('path');
 const db = require('./db');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
+const { authRequired, adminOnly, customerOnly } = require('./middleware/auth');
 
 const app = express();
 const port = 3000;
@@ -27,10 +28,10 @@ app.get('/api/test-db', (req, res) => {
 
 // صفحه‌ی اصلی
 app.get('/', (req, res) => {
-  res.send('✅ سرور Node.js اجرا شد و به MySQL (XAMPP) وصله');
+  res.send('✅ سرور Node.js اجرا شد و به MySQL وصله');
 });
 
-// ✅ فقط یک API برای خودروها (با JOIN تصاویر)
+// لیست خودروها
 app.get('/api/cars', async (req, res) => {
   try {
     const [rows] = await db.promise().query(`
@@ -39,7 +40,6 @@ app.get('/api/cars', async (req, res) => {
       LEFT JOIN carimages ON cars.id = carimages.car_id
     `);
 
-    // گروه‌بندی عکس‌ها برای هر خودرو
     const cars = {};
     rows.forEach(r => {
       if (!cars[r.id]) {
@@ -58,12 +58,32 @@ app.get('/api/cars', async (req, res) => {
 
     res.json(Object.values(cars));
   } catch (err) {
-    console.error('❌ خطا در واکشی خودروها:', err);
     res.status(500).json({ error: 'Database error' });
   }
 });
 
-// ✅ در آخر، بعد از همه‌ی روت‌ها:
+// ---------------------
+// 🔥 داشبورد مدیر
+// ---------------------
+app.get('/api/admin/dashboard', authRequired, adminOnly, async (req, res) => {
+  try {
+    const [cars] = await db.promise().query('SELECT * FROM cars');
+    res.json({ message: 'پنل مدیر', cars });
+  } catch {
+    res.status(500).json({ error: 'DB error' });
+  }
+});
+
+// ---------------------
+// 🔥 داشبورد مشتری
+// ---------------------
+app.get('/api/customer/dashboard', authRequired, customerOnly, async (req, res) => {
+  res.json({ message: 'پنل مشتری', user: req.user });
+});
+
+// ---------------------
+// ❗️ در آخر فقط این
+// ---------------------
 app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}`);
 });

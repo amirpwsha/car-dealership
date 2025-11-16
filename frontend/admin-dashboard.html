@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>داشبورد مدیر | خودرو۹۰</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="main-header">
+  <div class="logo">پنل مدیر</div>
+  <nav class="main-nav">
+    <button id="logoutBtn" class="nav-item button-like">خروج</button>
+  </nav>
+</header>
+
+<main class="cars-page">
+  <h1>لیست خودروها (Admin)</h1>
+  <div id="cars-container" class="cars-container"></div>
+</main>
+
+<script>
+async function loadAdminDashboard() {
+  const res = await fetch('/api/admin/dashboard');
+  if (res.status === 401 || res.status === 403) {
+    alert("دسترسی غیرمجاز! ابتدا وارد شوید.");
+    location.href = "login.html";
+    return;
+  }
+
+  const data = await res.json();
+  const container = document.getElementById('cars-container');
+
+  container.innerHTML = data.cars.map(c => `
+    <div class="car-card">
+      <h2>${c.brand} ${c.model}</h2>
+      <p>سال: ${c.year}</p>
+      <p>قیمت: ${c.price.toLocaleString()} تومان</p>
+      <p>وضعیت: ${c.status}</p>
+    </div>
+  `).join('');
+}
+
+loadAdminDashboard();
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  await fetch('/api/auth/logout', { method: 'POST' });
+  location.href = "login.html";
+});
+</script>
+
+</body>
+</html>

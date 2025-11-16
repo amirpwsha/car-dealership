@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>داشبورد مشتری | خودرو۹۰</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="main-header">
+  <div class="logo">پنل مشتری</div>
+  <nav class="main-nav">
+    <button id="logoutBtn" class="nav-item button-like">خروج</button>
+  </nav>
+</header>
+
+<main class="cars-page">
+  <h1>اطلاعات حساب شما</h1>
+  <div id="user-info" class="car-card"></div>
+</main>
+
+<script>
+async function loadCustomerDashboard() {
+  const res = await fetch('/api/customer/dashboard');
+  if (res.status === 401 || res.status === 403) {
+    alert("ابتدا وارد شوید.");
+    location.href = "login.html";
+    return;
+  }
+
+  const data = await res.json();
+  document.getElementById('user-info').innerHTML = `
+    <h2>خوش آمدید ${data.user.username}</h2>
+    <p>ایمیل: ${data.user.email || '---'}</p>
+    <p>نقش: مشتری</p>
+  `;
+}
+
+loadCustomerDashboard();
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  await fetch('/api/auth/logout', { method: 'POST' });
+  location.href = "login.html";
+});
+</script>
+
+</body>
+</html>
