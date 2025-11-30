@@ -4,7 +4,7 @@ const db = require('../db');
 const { authRequired, customerOnly } = require('../middleware/auth');
 
 // ارسال درخواست خرید
-router.post('/create', authRequired, customerOnly, (req, res) => {
+router.post("/send", authRequired, customerOnly, (req, res) => {
   const { car_id } = req.body;
   const user_id = req.user.id;
 
@@ -16,8 +16,8 @@ router.post('/create', authRequired, customerOnly, (req, res) => {
     "INSERT INTO PurchaseRequests (user_id, car_id, request_date, status) VALUES (?, ?, NOW(), 'pending')",
     [user_id, car_id],
     (err) => {
-      if (err) return res.status(500).json({ error: "DB error" });
-      return res.json({ message: "درخواست خرید ثبت شد!" });
+      if (err) return res.status(500).json({ error: "DB Error" });
+      return res.json({ message: "درخواست خرید با موفقیت ثبت شد!" });
     }
   );
 });

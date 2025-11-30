@@ -168,10 +168,23 @@ async function loadAdminDashboard() {
       </div>
 
       <button onclick="openEditModal(${c.id})" class="button-like" style="margin-top:10px;">ویرایش</button>
-      <button onclick="deleteCar(${c.id})" style="margin-top:10px;background:red;color:white;padding:6px 10px;border:none;border-radius:6px;cursor:pointer;">
-        حذف
-      </button>
-      <button onclick="openAddImage(${c.id})" class="button-like" style="margin-top:10px;">افزودن عکس</button>
+
+<button onclick="deleteCar(${c.id})"
+  style="margin-top:10px;background:red;color:white;padding:6px 10px;border:none;border-radius:6px;cursor:pointer;">
+  حذف
+</button>
+
+${
+  c.status === "available"
+    ? `<button onclick="markSold(${c.id})"
+         class="button-like"
+         style="margin-top:10px; background:#f39c12; border:none;">
+         علامت‌گذاری فروخته‌شده
+       </button>`
+    : `<span style="display:inline-block; margin-top:10px; color:#888;">(خودرو فروخته شده است)</span>`
+}
+
+<button onclick="openAddImage(${c.id})" class="button-like" style="margin-top:10px;">افزودن عکس</button>
     </div>
   `).join('');
 }
@@ -186,6 +199,20 @@ async function deleteCar(id) {
   });
 
   alert((await res.json()).message);
+  loadAdminDashboard();
+}
+
+// علامت‌گذاری خودرو به عنوان فروخته‌شده
+async function markSold(id) {
+  if (!confirm("آیا مطمئن هستید که این خودرو فروخته شده است؟")) return;
+
+  const res = await fetch(`/api/admin/cars/${id}/mark-sold`, {
+    method: "POST",
+    credentials: "include"
+  });
+
+  const data = await res.json();
+  alert(data.message);
   loadAdminDashboard();
 }
 

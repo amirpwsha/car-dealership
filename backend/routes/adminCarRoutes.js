@@ -158,4 +158,24 @@ router.delete("/cars/image/:imageId", authRequired, adminOnly, (req, res) => {
   });
 });
 
+// ===============================
+// 6) علامت‌گذاری خودرو به عنوان فروخته‌شده
+// ===============================
+router.post("/cars/:id/mark-sold", authRequired, adminOnly, (req, res) => {
+  const carId = req.params.id;
+
+  db.query(
+    "UPDATE cars SET status='sold' WHERE id=?",
+    [carId],
+    (err) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ error: "خطا در تغییر وضعیت خودرو" });
+      }
+
+      res.json({ message: "خودرو به عنوان فروخته‌شده علامت‌گذاری شد" });
+    }
+  );
+});
+
 module.exports = router;

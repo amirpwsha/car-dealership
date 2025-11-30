@@ -53,7 +53,7 @@ async function loadCars() {
   container.innerHTML = cars.map(car => `
     <div class="car-card">
       <h3>${car.brand} ${car.model}</h3>
-      <p>سال: ${car.year}</p>
+      <p>سال: ${toShamsiYear(car.year)}</p>
       <p>قیمت: ${Number(car.price).toLocaleString()} تومان</p>
       <p>وضعیت: ${car.status === "available" ? "موجود" : "فروخته‌شده"}</p>
 
@@ -90,6 +90,12 @@ async function sendRequest(id) {
 
   const data = await res.json();
   alert(data.message);
+}
+
+function toShamsiYear(gYear) {
+  if (!gYear) return "-";
+  const d = new Date(`${gYear}-01-01`);
+  return d.toLocaleDateString("fa-IR").split("/")[0];
 }
 
 // ------------------------
