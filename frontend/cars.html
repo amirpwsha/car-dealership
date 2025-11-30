@@ -2,45 +2,60 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>خودرو۹۰</title>
+  <title>لیست خودروها | خودرو۹۰</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <header class="main-header">
-    <div class="logo">KHODRO 90</div>
-    <nav class="main-nav">
-      <a href="index.html" class="nav-item">خانه</a>
-      <a href="login.html" class="nav-item">خروج</a>
-    </nav>
-  </header>
 
-  <main class="cars-page">
-    <h1>لیست خودروها</h1>
-    <div id="cars-container" class="cars-container"></div>
-  </main>
+<header class="main-header">
+  <div class="logo">KHODRO 90</div>
+  <nav class="main-nav">
+    <a href="index.html" class="nav-item">خانه</a>
+    <a href="login.html" class="nav-item">ورود</a>
+    <a href="signup.html" class="nav-item">ثبت‌نام</a>
+  </nav>
+</header>
 
-  <script>
-    async function loadCars() {
-      const res = await fetch('/api/cars');
-      const cars = await res.json();
-      const container = document.getElementById('cars-container');
-      container.innerHTML = '';
+<main style="padding:80px 40px;">
+  <h1>لیست خودروها</h1>
 
-      cars.forEach(car => {
-        const div = document.createElement('div');
-        div.className = 'car-card';
-        div.innerHTML = `
-          <h2>${car.brand} ${car.model}</h2>
-          <p>قیمت: ${car.price.toLocaleString()} تومان</p>
-          <div class="car-images">
-            ${car.images.map(img => `<img src="${img}" alt="${car.name}">`).join('')}
-          </div>
-        `;
-        container.appendChild(div);
-      });
-    }
+  <div id="cars-container" class="cars-container"></div>
+</main>
 
-    loadCars();
-  </script>
+<script>
+// ------------------------
+// گرفتن لیست خودروها
+// ------------------------
+
+async function loadCars() {
+  const res = await fetch("/api/cars");
+  const cars = await res.json();
+
+  const container = document.getElementById("cars-container");
+
+  container.innerHTML = cars.map(car => `
+    <div class="car-card">
+      <h3>${car.brand} ${car.model}</h3>
+      <p>قیمت: ${Number(car.price).toLocaleString()} تومان</p>
+
+      <div class="car-images">
+        ${
+          car.images.length
+          ? car.images.map(imgObj => `
+              <img src="/${imgObj.url}"
+               style="width:100px; height:70px; object-fit:cover; border-radius:6px;">
+            `).join('')
+          : "<p>بدون عکس</p>"
+        }
+      </div>
+    </div>
+  `).join('');
+}
+
+loadCars();
+
+</script>
+
 </body>
 </html>

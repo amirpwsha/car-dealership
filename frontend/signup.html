@@ -12,10 +12,6 @@
       <input name="username" placeholder="نام کاربری" required>
       <input name="email" type="email" placeholder="ایمیل" required>
       <input name="password" type="password" placeholder="رمز عبور" required>
-      <select name="role">
-        <option value="customer">مشتری</option>
-        <option value="admin">مدیر</option>
-      </select>
       <button type="submit">ثبت‌نام</button>
     </form>
     <p id="msg"></p>
@@ -29,11 +25,11 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
   const payload = {
     username: f.username.value,
     email: f.email.value,
-    password: f.password.value,
-    role: f.role.value
+    password: f.password.value
   };
   const res = await fetch('/api/auth/signup', {
-    method:'POST', headers:{'Content-Type':'application/json'},
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
     body: JSON.stringify(payload)
   });
   const data = await res.json();

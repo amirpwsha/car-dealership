@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>درخواست‌های من | خودرو۹۰</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="main-header">
+  <div class="logo">درخواست‌های من</div>
+  <nav class="main-nav">
+    <a href="customer-dashboard.html" class="nav-item">بازگشت</a>
+    <button id="logoutBtn" class="nav-item button-like">خروج</button>
+  </nav>
+</header>
+
+<main class="cars-page">
+  <h1>لیست درخواست‌های ارسال‌شده</h1>
+  <div id="req-container" class="cars-container"></div>
+</main>
+
+<script>
+async function loadRequests() {
+  const res = await fetch('/api/requests/my', {
+    credentials: "include"
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    alert("ابتدا وارد شوید.");
+    location.href = "login.html";
+    return;
+  }
+
+  const data = await res.json();
+  const c = document.getElementById('req-container');
+
+  if (data.requests.length === 0) {
+    c.innerHTML = "<p>شما هنوز هیچ درخواست خرید ارسال نکرده‌اید.</p>";
+    return;
+  }
+
+  c.innerHTML = data.requests.map(r => `
+    <div class="car-card">
+      <h3>${r.brand} ${r.model}</h3>
+      <p>قیمت: ${Number(r.price).toLocaleString()} تومان</p>
+      <p>تاریخ درخواست: ${r.request_date}</p>
+      <p>وضعیت: ${r.status}</p>
+    </div>
+  `).join('');
+}
+
+loadRequests();
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  await fetch('/api/auth/logout', { method: 'POST' });
+  location.href = "login.html";
+});
+</script>
+
+</body>
+</html>

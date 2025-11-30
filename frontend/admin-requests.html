@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مدیریت درخواست‌ها | خودرو۹۰</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="main-header">
+  <div class="logo">درخواست‌های خرید</div>
+  <nav class="main-nav">
+    <a href="admin-dashboard.html" class="nav-item">بازگشت</a>
+    <button id="logoutBtn" class="nav-item button-like">خروج</button>
+  </nav>
+</header>
+
+<main class="cars-page">
+  <h1>درخواست‌های مشتریان</h1>
+  <div id="req-container" class="cars-container"></div>
+</main>
+
+<script>
+async function loadRequests() {
+  const res = await fetch('/api/admin/requests/all', {
+    credentials: "include"
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    alert("دسترسی غیرمجاز!");
+    location.href = "login.html";
+    return;
+  }
+
+  const data = await res.json();
+  const c = document.getElementById('req-container');
+
+  c.innerHTML = data.requests.length === 0
+    ? "<p>هیچ درخواستی وجود ندارد.</p>"
+    : data.requests.map(r => `
+      <div class="car-card">
+        <h3>${r.brand} ${r.model}</h3>
+        <p>قیمت: ${Number(r.price).toLocaleString()} تومان</p>
+        <p>مشتری: ${r.username} (${r.email})</p>
+        <p>تاریخ درخواست: ${r.request_date}</p>
+        <p>وضعیت فعلی: <b>${r.status}</b></p>
+        <button class="buy-btn" onclick="approve(${r.id})">تأیید</button>
+        <button class="buy-btn" style="background:#c0392b;" onclick="reject(${r.id})">رد</button>
+      </div>
+    `).join('');
+}
+
+async function approve(id) {
+  const res = await fetch('/api/admin/requests/approve', {
+    method: "POST",
+    credentials: "include",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ request_id: id })
+  });
+
+  alert((await res.json()).message);
+  loadRequests();
+}
+
+async function reject(id) {
+  const res = await fetch('/api/admin/requests/reject', {
+    method: "POST",
+    credentials: "include",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ request_id: id })
+  });
+
+  alert((await res.json()).message);
+  loadRequests();
+}
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  await fetch('/api/auth/logout', { method: 'POST' });
+  location.href = "login.html";
+});
+
+loadRequests();
+</script>
+
+</body>
+</html>

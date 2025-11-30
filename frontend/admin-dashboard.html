@@ -4,50 +4,312 @@
   <meta charset="UTF-8">
   <title>داشبورد مدیر | خودرو۹۰</title>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 350px;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
 
 <header class="main-header">
-  <div class="logo">پنل مدیر</div>
+  <div class="logo">پنل مدیریت</div>
   <nav class="main-nav">
     <button id="logoutBtn" class="nav-item button-like">خروج</button>
   </nav>
 </header>
 
 <main class="cars-page">
-  <h1>لیست خودروها (Admin)</h1>
+  <h1>مدیریت خودروها</h1>
+
+  <button onclick="openAddCarModal()" class="button-like" style="margin-bottom:20px;">
+    افزودن خودروی جدید
+  </button>
+
+  <div style="margin-bottom:20px; display:flex; gap:10px;">
+    <a href="admin-requests.html" class="button-like">درخواست‌های خرید</a>
+    <a href="manage-admins.html" class="button-like">مدیریت مدیران</a>
+  </div>
+
   <div id="cars-container" class="cars-container"></div>
 </main>
 
-<script>
-async function loadAdminDashboard() {
-  const res = await fetch('/api/admin/dashboard');
-  if (res.status === 401 || res.status === 403) {
-    alert("دسترسی غیرمجاز! ابتدا وارد شوید.");
-    location.href = "login.html";
-    return;
-  }
+<!-- مودال افزودن خودرو جدید -->
+<div id="addCarModal" class="modal">
+  <div class="modal-content">
+    <h3>افزودن خودرو</h3>
 
+    <form id="addCarForm">
+
+      <label>برند:</label>
+      <input id="add-brand" required><br><br>
+
+      <label>مدل:</label>
+      <input id="add-model" required><br><br>
+
+      <label>سال (میلادی):</label>
+      <input id="add-year" type="number" required><br><br>
+
+      <label>قیمت:</label>
+      <input id="add-price" type="text" required><br><br>
+
+      <label>عکس خودرو:</label>
+      <input id="add-image" type="file" accept="image/*"><br><br>
+
+      <button type="submit" class="button-like">ثبت خودرو</button>
+      <button type="button" onclick="closeAddCarModal()" style="margin-top:10px;">بستن</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- مودال ویرایش خودرو -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h3>ویرایش خودرو</h3>
+
+    <form id="editForm">
+
+      <input type="hidden" id="edit-id">
+
+      <label>برند:</label>
+      <input id="edit-brand" required><br><br>
+
+      <label>مدل:</label>
+      <input id="edit-model" required><br><br>
+
+      <label>سال (میلادی):</label>
+      <input id="edit-year" type="number" required><br><br>
+
+      <label>قیمت:</label>
+      <input id="edit-price" type="text" required><br><br>
+
+      <label>وضعیت:</label>
+      <select id="edit-status">
+        <option value="available">موجود</option>
+        <option value="sold">فروخته‌شده</option>
+      </select><br><br>
+
+      <button type="submit" class="button-like">ذخیره تغییرات</button>
+      <button type="button" onclick="closeEditModal()" style="margin-top:10px;">بستن</button>
+    </form>
+  </div>
+</div>
+
+
+<script>
+
+// تبدیل سال میلادی به شمسی
+function toShamsiYear(gYear) {
+  if (!gYear) return "-";
+  const d = new Date(`${gYear}-01-01`);
+  return d.toLocaleDateString("fa-IR").split("/")[0];
+}
+
+// بارگذاری داشبورد
+async function loadAdminDashboard() {
+  const res = await fetch("/api/admin/dashboard", { credentials:"include" });
   const data = await res.json();
-  const container = document.getElementById('cars-container');
+
+  window.allCars = data.cars;
+
+  const container = document.getElementById("cars-container");
 
   container.innerHTML = data.cars.map(c => `
     <div class="car-card">
-      <h2>${c.brand} ${c.model}</h2>
-      <p>سال: ${c.year}</p>
-      <p>قیمت: ${c.price.toLocaleString()} تومان</p>
-      <p>وضعیت: ${c.status}</p>
+      <h3>${c.brand} ${c.model}</h3>
+      <p>سال: ${toShamsiYear(c.year)}</p>
+      <p>قیمت: ${Number(c.price).toLocaleString()} تومان</p>
+      <p>وضعیت: ${c.status === "available" ? "موجود" : "فروخته‌شده"}</p>
+
+      <div class="car-images">
+        ${
+          c.images && c.images.length
+            ? c.images.map(imgObj => `
+              <div style="position:relative; display:inline-block; margin:5px;">
+                <img src="/${imgObj.url}" 
+                     style="width:90px; height:70px; object-fit:cover; border-radius:6px;">
+
+                <button onclick="deleteImage(${imgObj.id})"
+                  style="
+                    position:absolute;
+                    top:-5px;
+                    right:-5px;
+                    background:red;
+                    color:white;
+                    border:none;
+                    font-size:12px;
+                    padding:2px 5px;
+                    border-radius:50%;
+                    cursor:pointer;
+                  ">
+                  ×
+                </button>
+              </div>
+            `).join('')
+            : "<p>بدون عکس</p>"
+        }
+      </div>
+
+      <button onclick="openEditModal(${c.id})" class="button-like" style="margin-top:10px;">ویرایش</button>
+      <button onclick="deleteCar(${c.id})" style="margin-top:10px;background:red;color:white;padding:6px 10px;border:none;border-radius:6px;cursor:pointer;">
+        حذف
+      </button>
+      <button onclick="openAddImage(${c.id})" class="button-like" style="margin-top:10px;">افزودن عکس</button>
     </div>
   `).join('');
 }
 
-loadAdminDashboard();
+// حذف خودرو
+async function deleteCar(id) {
+  if (!confirm("حذف خودرو؟")) return;
 
+  const res = await fetch(`/api/admin/cars/${id}`, {
+    method: "DELETE",
+    credentials: "include"
+  });
+
+  alert((await res.json()).message);
+  loadAdminDashboard();
+}
+
+// باز کردن مودال ویرایش
+function openEditModal(id) {
+  const car = window.allCars.find(c => c.id === id);
+
+  document.getElementById("edit-id").value = car.id;
+  document.getElementById("edit-brand").value = car.brand;
+  document.getElementById("edit-model").value = car.model;
+  document.getElementById("edit-year").value = car.year;
+  document.getElementById("edit-price").value = car.price;
+  document.getElementById("edit-status").value = car.status;
+
+  document.getElementById("editModal").style.display = "flex";
+}
+
+function closeEditModal() {
+  document.getElementById("editModal").style.display = "none";
+}
+
+// ذخیره ویرایش
+document.getElementById("editForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const id = document.getElementById("edit-id").value;
+
+  const payload = {
+    brand: document.getElementById("edit-brand").value,
+    model: document.getElementById("edit-model").value,
+    year: document.getElementById("edit-year").value,
+    price: document.getElementById("edit-price").value,
+    status: document.getElementById("edit-status").value
+  };
+
+  const res = await fetch(`/api/admin/cars/${id}`, {
+    method: "PUT",
+    credentials:"include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  alert((await res.json()).message);
+  closeEditModal();
+  loadAdminDashboard();
+});
+
+// افزودن عکس جدید
+function openAddImage(carId) {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+
+  input.onchange = async () => {
+    const formData = new FormData();
+    formData.append("image", input.files[0]);
+
+    const res = await fetch(`/api/admin/cars/${carId}/image`, {
+      method: "POST",
+      credentials:"include",
+      body: formData
+    });
+
+    alert((await res.json()).message);
+    loadAdminDashboard();
+  };
+
+  input.click();
+}
+
+// حذف عکس
+async function deleteImage(imageId) {
+  if (!confirm("آیا می‌خواهید این عکس حذف شود؟")) return;
+
+  const res = await fetch(`/api/admin/cars/image/${imageId}`, {
+    method: "DELETE",
+    credentials: "include"
+  });
+
+  alert((await res.json()).message);
+  loadAdminDashboard();
+}
+
+// مودال افزودن خودرو
+function openAddCarModal() {
+  document.getElementById("addCarModal").style.display = "flex";
+}
+function closeAddCarModal() {
+  document.getElementById("addCarModal").style.display = "none";
+}
+
+// ثبت خودرو جدید همراه عکس
+document.getElementById("addCarForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData();
+  formData.append("brand", document.getElementById("add-brand").value);
+  formData.append("model", document.getElementById("add-model").value);
+  formData.append("year", document.getElementById("add-year").value);
+  formData.append("price", document.getElementById("add-price").value);
+
+  const imageFile = document.getElementById("add-image").files[0];
+  if (imageFile) formData.append("image", imageFile);
+
+  const res = await fetch("/api/admin/cars", {
+    method: "POST",
+    credentials:"include",
+    body: formData
+  });
+
+  alert((await res.json()).message);
+  closeAddCarModal();
+  loadAdminDashboard();
+});
+
+// خروج
 document.getElementById("logoutBtn").addEventListener("click", async () => {
-  await fetch('/api/auth/logout', { method: 'POST' });
+  await fetch("/api/auth/logout", { method: "POST", credentials:"include" });
   location.href = "login.html";
 });
+
+// اجرا
+loadAdminDashboard();
+
 </script>
 
 </body>

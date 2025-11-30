@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>مدیریت مدیران</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<header class="main-header">
+  <div class="logo">مدیریت مدیران</div>
+  <nav class="main-nav">
+    <a href="admin-dashboard.html" class="nav-item">بازگشت</a>
+    <button id="logoutBtn" class="nav-item button-like">خروج</button>
+  </nav>
+</header>
+
+<main class="cars-page">
+  <h1>ایجاد مدیر جدید</h1>
+
+  <form id="new-admin-form" class="auth-card">
+    <input name="username" placeholder="نام کاربری" required>
+    <input name="email" type="email" placeholder="ایمیل" required>
+    <input name="password" type="password" placeholder="رمز" required>
+    <button type="submit">ایجاد مدیر</button>
+  </form>
+
+  <h1 style="margin-top:40px;">حذف مدیر</h1>
+
+  <form id="remove-admin-form" class="auth-card">
+    <input name="email" type="email" placeholder="ایمیل مدیر" required>
+    <button type="submit" style="background:#c0392b;">حذف مدیر</button>
+  </form>
+</main>
+
+<script>
+document.getElementById('new-admin-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = e.target;
+
+  const res = await fetch('/api/admin/create-admin', {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    credentials: "include",
+    body: JSON.stringify({
+      username: f.username.value,
+      email: f.email.value,
+      password: f.password.value
+    })
+  });
+
+  const data = await res.json();
+  alert(data.message || data.error);
+});
+
+
+document.getElementById('remove-admin-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = e.target;
+
+  const res = await fetch('/api/admin/delete-admin', {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    credentials: "include",
+    body: JSON.stringify({ email: f.email.value })
+  });
+
+  const data = await res.json();
+  alert(data.message || data.error);
+});
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  await fetch('/api/auth/logout', { method: 'POST' });
+  location.href = "login.html";
+});
+</script>
+
+</body>
+</html>

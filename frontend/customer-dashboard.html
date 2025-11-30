@@ -11,38 +11,96 @@
 <header class="main-header">
   <div class="logo">پنل مشتری</div>
   <nav class="main-nav">
+    <a href="customer-requests.html" class="nav-item">درخواست‌های من</a>
     <button id="logoutBtn" class="nav-item button-like">خروج</button>
   </nav>
 </header>
 
-<main class="cars-page">
-  <h1>اطلاعات حساب شما</h1>
-  <div id="user-info" class="car-card"></div>
+<main style="padding:80px 40px;">
+  <h1 style="text-align:center;">داشبورد مشتری</h1>
+
+  <div id="user-info" style="text-align:center; margin-bottom:40px;"></div>
+
+  <h2 style="margin-top:30px;">لیست خودروهای موجود</h2>
+
+  <div id="cars-container" class="cars-container"></div>
 </main>
 
 <script>
-async function loadCustomerDashboard() {
-  const res = await fetch('/api/customer/dashboard');
-  if (res.status === 401 || res.status === 403) {
-    alert("ابتدا وارد شوید.");
-    location.href = "login.html";
-    return;
-  }
-
+// ------------------------
+// گرفتن مشخصات مشتری
+// ------------------------
+async function loadUser() {
+  const res = await fetch("/api/customer/dashboard", { credentials:"include" });
   const data = await res.json();
-  document.getElementById('user-info').innerHTML = `
-    <h2>خوش آمدید ${data.user.username}</h2>
-    <p>ایمیل: ${data.user.email || '---'}</p>
+
+  document.getElementById("user-info").innerHTML = `
+    <p>خوش آمدید، ${data.user.username}</p>
+    <p>ایمیل: ${data.user.email}</p>
     <p>نقش: مشتری</p>
   `;
 }
 
-loadCustomerDashboard();
+// ------------------------
+// گرفتن لیست خودروها
+// ------------------------
+async function loadCars() {
+  const res = await fetch("/api/cars");
+  const cars = await res.json();
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  await fetch('/api/auth/logout', { method: 'POST' });
+  const container = document.getElementById("cars-container");
+
+  container.innerHTML = cars.map(car => `
+    <div class="car-card">
+      <h3>${car.brand} ${car.model}</h3>
+      <p>سال: ${car.year}</p>
+      <p>قیمت: ${Number(car.price).toLocaleString()} تومان</p>
+      <p>وضعیت: ${car.status === "available" ? "موجود" : "فروخته‌شده"}</p>
+
+      <div class="car-images">
+        ${
+          car.images.length
+          ? car.images.map(imgObj => `
+              <img src="/${imgObj.url}" 
+              style="width:100px; height:70px; object-fit:cover; border-radius:6px;">
+            `).join('')
+          : "<p>بدون عکس</p>"
+        }
+      </div>
+
+      ${
+        car.status === "available"
+        ? `<button class="button-like" onclick="sendRequest(${car.id})">ارسال درخواست خرید</button>`
+        : ""
+      }
+    </div>
+  `).join('');
+}
+
+// ------------------------
+// ارسال درخواست خرید
+// ------------------------
+async function sendRequest(id) {
+  const res = await fetch("/api/requests/send", {
+    method: "POST",
+    credentials: "include",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ car_id:id })
+  });
+
+  const data = await res.json();
+  alert(data.message);
+}
+
+// ------------------------
+document.getElementById("logoutBtn").onclick = async () => {
+  await fetch("/api/auth/logout", { method:"POST", credentials:"include" });
   location.href = "login.html";
-});
+};
+
+loadUser();
+loadCars();
+
 </script>
 
 </body>
