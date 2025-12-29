@@ -1,127 +1,527 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html class="light" dir="rtl" lang="fa">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khodro90 - سامانه معاملات خودرو</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>دایرکتوری خودرو | خرید و فروش مطمئن</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#FF6700",
+            "primary-dark": "#e65c00",
+            "background-light": "#fcf9f8",
+            "background-dark": "#23170f",
+            "text-main": "#1d130c",
+            "text-secondary": "#a16a45",
+            "border-color": "#ead8cd",
+          },
+          fontFamily: {
+            "display": ["Vazirmatn", "sans-serif"],
+            "body": ["Vazirmatn", "sans-serif"],
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem",
+            "lg": "0.75rem",
+            "xl": "1rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
 </head>
-<body>
+<body class="bg-background-light text-text-main antialiased selection:bg-primary selection:text-white">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
 
-    <header class="main-header sticky-header">
-  <div class="logo">KHODRO 90</div>
-  <nav class="main-nav">
-    <a href="login.html" class="nav-item">ورود</a>
-    <a href="signup.html" class="nav-item">ثبت نام</a>
-    <a href="cars.html" class="nav-item button-like">لیست خودرو</a>
-    </nav>
-</header>
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex items-center justify-between border-b border-solid border-b-[#f4ece6] bg-white/95 backdrop-blur-sm px-6 py-4 lg:px-20">
+    <div class="flex items-center gap-8">
+      <!-- Logo -->
+      <div class="flex items-center gap-2 text-primary hover:text-primary-dark transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-4xl">directions_car</span>
+        <h1 class="text-text-main text-xl font-black tracking-tight hidden sm:block">اتو دایرکت</h1>
+      </div>
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-8">
+        <a class="text-text-main text-sm font-medium hover:text-primary transition-colors" href="index.html">خانه</a>
+        <a class="text-text-main text-sm font-medium hover:text-primary transition-colors" href="cars.html">خرید خودرو</a>
+        <a class="text-text-main text-sm font-medium hover:text-primary transition-colors" href="customer-dashboard.html">فروش خودرو</a>
+        <a class="text-text-main text-sm font-medium hover:text-primary transition-colors" href="news.html">اخبار</a>
+      </nav>
+    </div>
+    <!-- Actions -->
+    <div class="hidden lg:flex items-center gap-3">
+  
+  <!-- Login -->
+  <button onclick="window.location.href='login.html'"
+          class="h-10 px-6 text-sm font-bold text-primary bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors">
+      ورود
+  </button>
 
-
-    <div class="content-wrapper">
+  <!-- Signup -->
+  <button onclick="window.location.href='signup.html'"
+          class="h-10 px-6 text-sm font-bold text-white bg-primary rounded-lg hover:bg-primary-dark transition-colors shadow-lg shadow-primary/30">
+      ثبت نام
+  </button>
+      
         
-        <main class="hero-section">
-            <div class="content-box">
-                <h1 class="main-title">فروش خودروی شما</h1>
-                <h2 class="subtitle">تنها در چند ساعت</h2>
-                
-                
+      </button>
+      <button class="md:hidden p-2 text-text-main">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+    </div>
+  </header>
 
-                <div class="features-list">
-                    <div class="feature-item">
-                        <span class="icon">✅</span>
-                        <p>مدیریت خودرو و مشتریان</p>
-                    </div>
-                    <div class="feature-item">
-                        <span class="icon">✅</span>
-                        <p>نمایش و جستجوی خودروها</p>
-                    </div>
-                    <div class="feature-item">
-                        <span class="icon">✅</span>
-                        <p>پنل مدیریت ساده و کارپسند</p>
-                    </div>
-                </div>
+  <!-- Hero Section -->
+  <section class="relative w-full bg-background-light px-4 py-8 lg:px-20 lg:py-12">
+    <div class="mx-auto max-w-7xl rounded-2xl overflow-hidden relative min-h-[500px] flex flex-col items-center justify-center text-center p-6 lg:p-12 shadow-2xl">
+      <!-- Background Image with Gradient Overlay -->
+      <div class="absolute inset-0 bg-cover bg-center z-0"
+           style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD_IFxQT2uDtXsvrtUBAVAXIwlYvv9CNSuxK1aqlaOJxRW_R5TKNbG3W3TIxxnT1_mNmnJWGIiI8G2F0kaDDpd6dO3VU28kvGchI_uAFNJ6yuq8Th5ZLPbE3lOX8qazNBkd4nzJDg7oi0wEMl-D7wJfwz_iAsrTwl7uEc3HiemQQdBFDgvi527OCiltz3lFy2GeZDW7UtvBFAA74C1K-YAP_PHI8KmHKztc6kaKRkE3ctNAmha25RQ5ebHhfvgY5acQvzCCIPZzeEI");'>
+      </div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/30 z-0"></div>
+      <!-- Content -->
+      <div class="relative z-10 w-full max-w-4xl flex flex-col gap-6 items-center">
+        <span class="inline-flex items-center rounded-full bg-white/20 px-4 py-1.5 text-xs font-medium text-white backdrop-blur-md border border-white/10">
+          <span class="material-symbols-outlined text-[16px] ml-1 text-primary">verified</span>
+          مرجع تخصصی خرید و فروش خودرو
+        </span>
+        <h1 class="text-white text-4xl lg:text-6xl font-black leading-tight tracking-tight">
+          مسیر رسیدن به <span class="text-primary">خودروی رویایی</span>
+        </h1>
+        <p class="text-gray-200 text-base lg:text-lg max-w-2xl font-light">
+          جستجو در میان هزاران آگهی کارشناسی شده با ضمانت سلامت فنی و بدنه. خرید امن و فروش سریع را با ما تجربه کنید.
+        </p>
+
+        <!-- Search Bar -->
+        <div class="w-full max-w-3xl mt-6">
+          <div class="bg-white p-2 rounded-xl flex flex-col md:flex-row gap-2 shadow-xl">
+            <div class="flex-1 flex items-center px-4 h-12 border-b md:border-b-0 md:border-l border-gray-100">
+              <span class="material-symbols-outlined text-gray-400 ml-3">search</span>
+              <input
+                id="search-model"
+                class="w-full bg-transparent border-none focus:ring-0 text-text-main placeholder-gray-400 text-sm font-medium h-full"
+                placeholder="نام برند یا مدل (مثلا: پژو 206)..."
+                type="text"
+              />
             </div>
-        </main>
-
-        <section class="why-sell-section">
-            <div class="sell-content">
-                <h2 class="section-title">چرا با خودرو۹۰ بفروشم؟</h2>
-
-                <div class="sell-feature">
-                    <span class="feature-icon">⏱️</span>
-                    <h3 class="feature-title">فروش سریع</h3>
-                    <p>تمام مراحل فروش خودرو شامل کارشناسی، تعیین قیمت و امضای قرارداد فروش؛ تنها در یک روز انجام می‌شود.</p>
-                </div>
-                
-                <div class="sell-feature">
-                    <span class="feature-icon">🔒</span>
-                    <h3 class="feature-title">معامله امن</h3>
-                    <p>سراسر فرایند فروش خودرو شما، از کارشناسی و عقد قرارداد تا تعویض پلاک، تحت نظارت واحد حقوقی خودرو۹۰ و در امنیت کامل انجام می‌شود.</p>
-                </div>
-
-                <div class="sell-feature">
-                    <span class="feature-icon">👍</span>
-                    <h3 class="feature-title">فرایند آسان</h3>
-                    <p>فقط با یک بار مراجعه به شعبه سراسری خودرو۹۰، بدون نیاز به هیچ اقدام اضافی، فرایند فروش توسط خودرو۹۰ انجام می‌شود.</p>
-                </div>
+            <div class="flex-1 flex items-center px-4 h-12 border-b md:border-b-0 md:border-l border-gray-100">
+              <span class="material-symbols-outlined text-gray-400 ml-3">location_on</span>
+              <select
+                id="search-province"
+                class="w-full bg-transparent border-none focus:ring-0 text-text-main text-sm font-medium h-full cursor-pointer"
+              >
+                <option value="">همه استان‌ها</option>
+                <option value="تهران">تهران</option>
+                <option value="مشهد">مشهد</option>
+                <option value="اصفهان">اصفهان</option>
+                <option value="شیراز">شیراز</option>
+              </select>
             </div>
-        </section>
-        
-        <section class="comparison-section">
-            <h2 class="comparison-title">مقایسه روش‌های فروش خودرو</h2>
-            <div class="comparison-table-wrapper">
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th class="feature-column-header">ویژگی‌ها</th> 
-                            <th class="khodro90-highlight-header">KHODRO 90</th>
-                            <th>نمایشگاه‌ها</th>
-                            <th>آگهی‌ها</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="feature-column">سرعت فروش</td>
-                            <td class="khodro90-highlight-cell">۴۵ دقیقه</td>
-                            <td>۱ الی ۲ هفته</td>
-                            <td>۲ الی ۴ هفته</td>
-                        </tr>
-                        <tr>
-                            <td class="feature-column">امنیت حقوقی</td>
-                            <td class="khodro90-highlight-cell"><span class="icon-good">✅</span></td>
-                            <td><span class="icon-bad">❌</span></td>
-                            <td><span class="icon-bad">❌</span></td>
-                        </tr>
-                        <tr>
-                            <td class="feature-column">سادگی فرایند فروش</td>
-                            <td class="khodro90-highlight-cell"><span class="icon-good">✅</span></td>
-                            <td><span class="icon-bad">❌</span></td>
-                            <td><span class="icon-bad">❌</span></td>
-                        </tr>
-                        <tr>
-                            <td class="feature-column">کارشناسی رایگان</td>
-                            <td class="khodro90-highlight-cell"><span class="icon-good">✅</span></td>
-                            <td><span class="icon-bad">❌</span></td>
-                            <td><span class="icon-bad">❌</span></td>
-                        </tr>
-                        <tr>
-                            <td class="feature-column">قیمت خودرو</td>
-                            <td class="khodro90-highlight-cell">متوسط</td>
-                            <td>پایین‌تر از متوسط</td>
-                            <td>بالاتر از متوسط</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
+            <button
+              id="search-btn"
+              type="button"
+              class="bg-primary hover:bg-primary-dark text-white h-12 px-8 rounded-lg font-bold text-sm transition-colors shadow-md flex items-center justify-center gap-2">
+              جستجو
+            </button>
+          </div>
+        </div>
 
-    </div> 
-    
-    <footer class="main-footer">
-        <p>توسعه‌دهندگان: امیرعلی روان بد و حمید کیانی و امیرحسین شبانی</p>
-    </footer>
+        <!-- Quick tags -->
+        <div class="flex flex-wrap justify-center gap-2 mt-4 text-sm text-gray-300">
+          <span>جستجوی سریع:</span>
+          <button type="button" data-quick="بنز" class="hover:text-white underline decoration-primary decoration-2 underline-offset-4">بنز</button>
+          <button type="button" data-quick="بی‌ام‌و" class="hover:text-white underline decoration-primary decoration-2 underline-offset-4">بی‌ام‌و</button>
+          <button type="button" data-quick="تویوتا" class="hover:text-white underline decoration-primary decoration-2 underline-offset-4">تویوتا</button>
+          <button type="button" data-quick="هیوندای" class="hover:text-white underline decoration-primary decoration-2 underline-offset-4">هیوندای</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Brands Section -->
+  <section class="py-8 border-b border-gray-100 bg-white">
+    <div class="mx-auto max-w-7xl px-6 lg:px-20">
+      <p class="text-center text-sm font-medium text-gray-400 mb-6">برندهای برتر موجود در دایرکتوری</p>
+      <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+        <span class="text-2xl font-black text-gray-800 font-sans">BMW</span>
+        <span class="text-2xl font-black text-gray-800 font-sans">MERCEDES</span>
+        <span class="text-2xl font-black text-gray-800 font-sans">TOYOTA</span>
+        <span class="text-2xl font-black text-gray-800 font-sans">HYUNDAI</span>
+        <span class="text-2xl font-black text-gray-800 font-sans">KIA</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Cars Carousel (دینامیک) -->
+  <section class="w-full py-16 bg-background-light">
+    <div class="mx-auto max-w-7xl px-6 lg:px-20">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-2xl font-bold text-text-main flex items-center gap-2">
+            <span class="w-1 h-6 bg-primary rounded-full block"></span>
+            خودروهای ویژه
+          </h2>
+          <p class="text-text-secondary text-sm mt-1 mr-3">پیشنهادات منتخب کارشناسان ما</p>
+        </div>
+        <a class="text-primary font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all" href="cars.html">
+          مشاهده همه <span class="material-symbols-outlined text-[18px] rotate-180">arrow_right_alt</span>
+        </a>
+      </div>
+
+      <div id="featured-cars" class="flex gap-6 overflow-x-auto pb-8 no-scrollbar snap-x">
+        <!-- کارت‌های ویژه به‌صورت داینامیک اینجا Inject می‌شوند -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Features / Why Us -->
+  <section class="py-16 bg-white">
+    <div class="mx-auto max-w-7xl px-6 lg:px-20">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="flex flex-col items-center text-center p-6 rounded-2xl hover:bg-background-light transition-colors">
+          <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
+            <span class="material-symbols-outlined text-4xl">verified_user</span>
+          </div>
+          <h3 class="text-xl font-bold text-text-main mb-2">کارشناسی دقیق</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">تمامی خودروها توسط کارشناسان مجرب بررسی شده و گزارش سلامت فنی ارائه می‌شود.</p>
+        </div>
+        <div class="flex flex-col items-center text-center p-6 rounded-2xl hover:bg-background-light transition-colors">
+          <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
+            <span class="material-symbols-outlined text-4xl">rocket_launch</span>
+          </div>
+          <h3 class="text-xl font-bold text-text-main mb-2">فروش سریع</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">آگهی شما در کمترین زمان ممکن تایید شده و در دید هزاران خریدار قرار می‌گیرد.</p>
+        </div>
+        <div class="flex flex-col items-center text-center p-6 rounded-2xl hover:bg-background-light transition-colors">
+          <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
+            <span class="material-symbols-outlined text-4xl">support_agent</span>
+          </div>
+          <h3 class="text-xl font-bold text-text-main mb-2">پشتیبانی ۲۴/۷</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">تیم پشتیبانی ما در تمامی مراحل خرید و فروش همراه شما خواهد بود.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest Listings Grid (دینامیک) -->
+  <section class="w-full py-16 bg-background-light">
+    <div class="mx-auto max-w-7xl px-6 lg:px-20">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-2xl font-bold text-text-main flex items-center gap-2">
+            <span class="w-1 h-6 bg-primary rounded-full block"></span>
+            جدیدترین آگهی‌ها
+          </h2>
+        </div>
+        <!-- Filters (فقط ظاهری) -->
+        <div class="hidden md:flex gap-2">
+          <button class="px-4 py-2 bg-white text-text-main text-sm font-bold rounded-lg shadow-sm border border-gray-200">همه</button>
+          <button class="px-4 py-2 bg-transparent text-gray-500 text-sm font-medium rounded-lg">سدان</button>
+          <button class="px-4 py-2 bg-transparent text-gray-500 text-sm font-medium rounded-lg">شاسی بلند</button>
+          <button class="px-4 py-2 bg-transparent text-gray-500 text-sm font-medium rounded-lg">کوپه</button>
+        </div>
+      </div>
+
+      <div id="latest-cars" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- کارت‌های جدیدترین آگهی‌ها داینامیک اینجا میاد -->
+      </div>
+
+      <div class="flex justify-center mt-12">
+        <button onclick="window.location.href='cars.html'" class="px-8 py-3 border border-gray-300 text-text-main font-bold rounded-lg hover:border-primary hover:text-primary transition-all bg-white shadow-sm">
+          مشاهده همه آگهی‌ها
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 px-6 lg:px-20 bg-white">
+    <div class="mx-auto max-w-7xl bg-gray-900 rounded-3xl overflow-hidden shadow-2xl relative">
+      <div class="absolute top-0 right-0 w-1/2 h-full bg-primary/20 rounded-full blur-[100px] transform translate-x-1/2 -translate-y-1/2"></div>
+      <div class="flex flex-col md:flex-row items-center relative z-10">
+        <div class="flex-1 p-8 md:p-16 text-center md:text-right">
+          <h2 class="text-3xl md:text-4xl font-black text-white mb-4">قصد فروش خودرو دارید؟</h2>
+          <p class="text-gray-300 mb-8 leading-relaxed max-w-lg">
+            با ثبت آگهی در دایرکتوری ما، خودروی خود را بدون واسطه و با بهترین قیمت به هزاران خریدار واقعی معرفی کنید.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+            <button onclick="window.location.href='customer-dashboard.html'" class="bg-primary hover:bg-primary-dark text-white h-12 px-8 rounded-xl font-bold transition-all shadow-lg shadow-primary/30 flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined">add_box</span>
+              ثبت رایگان آگهی
+            </button>
+            <button class="bg-white/10 hover:bg-white/20 text-white h-12 px-8 rounded-xl font-bold transition-all backdrop-blur-md">
+              مشاوره فروش
+            </button>
+          </div>
+        </div>
+        <div class="flex-1 h-64 md:h-auto w-full md:w-auto flex items-end justify-center md:justify-end md:pl-12 pb-8 md:pb-0">
+          <div class="text-white opacity-10">
+            <span class="material-symbols-outlined text-[200px] md:text-[300px]">handshake</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-100 pt-16 pb-8">
+    <div class="mx-auto max-w-7xl px-6 lg:px-20">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <!-- Brand -->
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center gap-2 text-primary">
+            <span class="material-symbols-outlined text-3xl">directions_car</span>
+            <span class="text-text-main text-xl font-black tracking-tight">اتو دایرکت</span>
+          </div>
+          <p class="text-gray-500 text-sm leading-loose">
+            مرجع تخصصی نقد و بررسی و خرید و فروش خودرو در ایران. ما متعهد به شفافیت و امنیت معاملات شما هستیم.
+          </p>
+          <div class="flex gap-4 mt-2">
+            <a class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors" href="#">
+              <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" fill-rule="evenodd"></path></svg>
+            </a>
+            <a class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors" href="#">
+              <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772 4.902 4.902 0 011.772-1.153c.636-.247 1.363-.416 2.427-.465 1.067-.047 1.409-.06 3.809-.063zm1.327 3.92-5.106.058c-2.131.023-3.193.188-3.928.473a2.91 2.91 0 00-1.085.679 2.91 2.91 0 00-.679 1.085c-.285.735-.45 1.797-.473 3.928l-.001 5.106c.023 2.131.188 3.194.473 3.928.243.625.56 1.115 1.085 1.638a2.91 2.91 0 001.639 1.085c.734.285 1.796.45 3.928.473l5.106.001c2.131-.023 3.194-.188 3.928-.473a2.91 2.91 0 001.085-1.638 2.91 2.91 0 00.679-1.085c.285-.735.45-1.796.473-3.928l.001-5.106c-.023-2.131-.188-3.193-.473-3.928a2.91 2.91 0 00-1.085-1.085 2.91 2.91 0 00-1.639-.679c-.735-.285-1.796-.45-3.928-.473zM12 7.554a4.446 4.446 0 110 8.892 4.446 4.446 0 010-8.892zm0 1.96a2.486 2.486 0 100 4.972 2.486 2.486 0 000-4.972zM18.845 5.66a1.44 1.44 0 110 2.88 1.44 1.44 0 010-2.88z" fill-rule="evenodd"></path></svg>
+            </a>
+          </div>
+        </div>
+        <!-- Links 1 -->
+        <div>
+          <h4 class="font-bold text-text-main mb-6">دسترسی سریع</h4>
+          <ul class="flex flex-col gap-3 text-sm text-gray-500">
+            <li><a class="hover:text-primary transition-colors" href="index.html">خانه</a></li>
+            <li><a class="hover:text-primary transition-colors" href="cars.html">جستجوی خودرو</a></li>
+            <li><a class="hover:text-primary transition-colors" href="customer-dashboard.html">ثبت آگهی</a></li>
+            <li><a class="hover:text-primary transition-colors" href="#">قیمت روز خودرو</a></li>
+          </ul>
+        </div>
+        <!-- Links 2 -->
+        <div>
+          <h4 class="font-bold text-text-main mb-6">خدمات مشتریان</h4>
+          <ul class="flex flex-col gap-3 text-sm text-gray-500">
+            <li><a class="hover:text-primary transition-colors" href="#">قوانین و مقررات</a></li>
+            <li><a class="hover:text-primary transition-colors" href="#">سوالات متداول</a></li>
+            <li><a class="hover:text-primary transition-colors" href="#">تماس با ما</a></li>
+            <li><a class="hover:text-primary transition-colors" href="#">درباره ما</a></li>
+          </ul>
+        </div>
+        <!-- Newsletter -->
+        <div>
+          <h4 class="font-bold text-text-main mb-6">عضویت در خبرنامه</h4>
+          <p class="text-sm text-gray-500 mb-4">برای دریافت آخرین اخبار و پیشنهادات ویژه ایمیل خود را وارد کنید.</p>
+          <div class="flex flex-col gap-2">
+            <input class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent text-sm" placeholder="ایمیل شما" type="email" />
+            <button class="w-full px-4 py-3 bg-text-main text-white font-bold rounded-lg hover:bg-black transition-colors text-sm">عضویت</button>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400">
+        <p>© ۱۴۰۳ تمامی حقوق محفوظ است.</p>
+        <div class="flex gap-4">
+          <a class="hover:text-primary" href="#">حریم خصوصی</a>
+          <a class="hover:text-primary" href="#">شرایط استفاده</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- اسکریپت داینامیک کردن صفحه -->
+<script>
+  async function fetchJSON(url) {
+    const res = await fetch(url, { credentials: "include" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    return res.json();
+  }
+
+  function toShamsiYear(gYear) {
+    if (!gYear) return "-";
+    const d = new Date(String(gYear) + "-01-01");
+    return d.toLocaleDateString("fa-IR").split("/")[0];
+  }
+
+  function formatPrice(price) {
+    const n = Number(price || 0);
+    return n.toLocaleString("fa-IR");
+  }
+
+  function getFirstImage(car) {
+    if (car.images && car.images.length && car.images[0].url) {
+      return "/" + car.images[0].url;
+    }
+    return "";
+  }
+
+  function renderFeaturedCars(cars) {
+    const container = document.getElementById("featured-cars");
+    if (!container) return;
+
+    if (!cars.length) {
+      container.innerHTML = '<p class="text-sm text-gray-400">خودرویی برای نمایش وجود ندارد.</p>';
+      return;
+    }
+
+    const sorted = [...cars].sort((a, b) => Number(b.price) - Number(a.price));
+    const featured = sorted.slice(0, 4);
+
+    container.innerHTML = featured.map(car => {
+      const img = getFirstImage(car);
+      const year = toShamsiYear(car.year);
+      return `
+        <div class="min-w-[280px] md:min-w-[320px] snap-center bg-white rounded-2xl p-3 shadow-sm hover:shadow-xl transition-shadow border border-gray-100 group">
+          <div class="relative aspect-[4/3] overflow-hidden rounded-xl mb-3">
+            <div class="absolute top-3 right-3 z-10 bg-primary text-white text-xs font-bold px-2 py-1 rounded shadow-lg">
+              ${car.status === "sold" ? "فروخته‌شده" : "ویژه"}
+            </div>
+            <div class="w-full h-full bg-gray-200 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
+                 style="${img ? `background-image: url('${img}');` : ""}">
+            </div>
+          </div>
+          <div class="px-1">
+            <h3 class="font-bold text-lg text-text-main truncate">
+              ${car.brand || ""} ${car.model || ""}
+            </h3>
+            <div class="flex items-center gap-2 text-xs text-gray-500 mt-1 mb-3">
+              <span class="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded">
+                <span class="material-symbols-outlined text-[14px]">calendar_month</span> ${year}
+              </span>
+            </div>
+            <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-50">
+              <span class="text-primary font-black text-lg">
+                ${formatPrice(car.price)} <span class="text-xs font-normal text-gray-500">تومان</span>
+              </span>
+              <button class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors"
+        onclick="window.location.href='car-details.html?id=${car.id}'">
+  <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function renderLatestCars(cars) {
+    const container = document.getElementById("latest-cars");
+    if (!container) return;
+
+    if (!cars.length) {
+      container.innerHTML = '<p class="text-sm text-gray-400 col-span-full text-center">خودرویی یافت نشد.</p>';
+      return;
+    }
+
+    const latest = [...cars].sort((a, b) => b.id - a.id).slice(0, 8);
+
+    container.innerHTML = latest.map(car => {
+      const img = getFirstImage(car);
+      const year = car.year || "-";
+      const city = car.city || "نامشخص";
+      const price = car.price ? formatPrice(car.price) + ' <span class="text-xs text-gray-400 font-normal">تومان</span>' : "توافقی";
+
+      return `
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 group overflow-hidden border border-gray-100">
+          <div class="relative h-48 overflow-hidden">
+            <div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500"
+                 style="${img ? `background-image: url('${img}');` : ""}">
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <span class="absolute bottom-3 left-3 text-white text-xs font-medium flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">location_on</span> ${city}
+            </span>
+          </div>
+          <div class="p-4">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-bold text-text-main">${car.brand || ""} ${car.model || ""}</h3>
+              <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">${year}</span>
+            </div>
+            <p class="text-primary font-bold text-lg mb-3">${price}</p>
+            <div class="flex justify-between items-center pt-3 border-t border-gray-50 text-xs text-gray-500">
+              <span>${car.status === "sold" ? "فروخته‌شده" : "موجود"}</span>
+              <button class="text-primary hover:text-primary-dark font-bold"
+        onclick="window.location.href='car-details.html?id=${car.id}'">
+  مشاهده
+</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  async function initHomePage() {
+    try {
+      const cars = await fetchJSON("/api/cars");
+      renderFeaturedCars(cars);
+      renderLatestCars(cars);
+    } catch (err) {
+      console.error("Home init error:", err);
+    }
+  }
+
+  async function handleSearch() {
+    const modelInput = document.getElementById("search-model");
+    const provinceSelect = document.getElementById("search-province");
+
+    const model = modelInput.value.trim();
+    const province = provinceSelect.value; // فعلاً فقط ظاهری است مگر در دیتابیس city داشته باشیم
+
+    let url = "/api/cars/search";
+    const params = [];
+    if (model) params.push("model=" + encodeURIComponent(model));
+    // اگر بعداً ستون city به دیتابیس اضافه کردی، این قسمت رو می‌تونی فعال کنی:
+    // if (province) params.push("city=" + encodeURIComponent(province));
+
+    if (params.length) url += "?" + params.join("&");
+
+    try {
+      const cars = await fetchJSON(url);
+      renderFeaturedCars(cars);
+      renderLatestCars(cars);
+    } catch (err) {
+      console.error("Search error:", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    initHomePage();
+
+    const searchBtn = document.getElementById("search-btn");
+    if (searchBtn) searchBtn.addEventListener("click", handleSearch);
+
+    // کوئیک‌سرچ‌ها
+    document.querySelectorAll("[data-quick]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const value = btn.getAttribute("data-quick");
+        const input = document.getElementById("search-model");
+        input.value = value;
+        handleSearch();
+      });
+    });
+  });
+</script>
 
 </body>
 </html>

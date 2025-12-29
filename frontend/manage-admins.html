@@ -1,39 +1,106 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>مدیریت مدیران</title>
-  <link rel="stylesheet" href="style.css">
+  <title>مدیریت مدیران | خودرو۹۰</title>
+
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <style>
+    body { font-family: "Vazirmatn", sans-serif; }
+  </style>
 </head>
 
-<body>
-<header class="main-header">
-  <div class="logo">مدیریت مدیران</div>
-  <nav class="main-nav">
-    <a href="admin-dashboard.html" class="nav-item">بازگشت</a>
-    <button id="logoutBtn" class="nav-item button-like">خروج</button>
-  </nav>
+<body class="bg-gray-50 min-h-screen">
+
+<!-- HEADER -->
+<header class="bg-white border-b shadow-sm sticky top-0 z-40">
+  <div class="max-w-5xl mx-auto flex justify-between items-center py-4 px-4">
+    <h1 class="text-xl font-black text-gray-800 flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary text-3xl">manage_accounts</span>
+      مدیریت مدیران
+    </h1>
+
+    <div class="flex items-center gap-3">
+      <a href="admin-dashboard.html"
+         class="px-4 py-2 text-sm rounded-lg bg-gray-200 hover:bg-gray-300 transition">بازگشت</a>
+      <button id="logoutBtn"
+              class="px-4 py-2 text-sm rounded-lg bg-red-500 hover:bg-red-600 text-white transition">خروج</button>
+    </div>
+  </div>
 </header>
 
-<main class="cars-page">
-  <h1>ایجاد مدیر جدید</h1>
+<!-- MAIN -->
+<main class="max-w-5xl mx-auto px-4 py-10">
 
-  <form id="new-admin-form" class="auth-card">
-    <input name="username" placeholder="نام کاربری" required>
-    <input name="email" type="email" placeholder="ایمیل" required>
-    <input name="password" type="password" placeholder="رمز" required>
-    <button type="submit">ایجاد مدیر</button>
-  </form>
+  <!-- CREATE ADMIN CARD -->
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-5 flex items-center gap-2 text-gray-700">
+      <span class="material-symbols-outlined text-primary">person_add</span>
+      ایجاد مدیر جدید
+    </h2>
 
-  <h1 style="margin-top:40px;">حذف مدیر</h1>
+    <div class="bg-white shadow-lg rounded-2xl border border-gray-200 p-6 max-w-lg">
+      <form id="new-admin-form" class="space-y-4">
 
-  <form id="remove-admin-form" class="auth-card">
-    <input name="email" type="email" placeholder="ایمیل مدیر" required>
-    <button type="submit" style="background:#c0392b;">حذف مدیر</button>
-  </form>
+        <input name="username" placeholder="نام کاربری"
+               class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+               required>
+
+        <input name="email" type="email" placeholder="ایمیل"
+               class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+               required>
+
+        <input name="password" type="password" placeholder="رمز عبور"
+               class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+               required>
+
+        <button type="submit"
+                class="w-full py-2 bg-primary text-white font-bold rounded-lg hover:bg-orange-600 transition flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined">add</span>
+          ایجاد مدیر
+        </button>
+      </form>
+    </div>
+  </section>
+
+
+
+
+  <!-- DELETE ADMIN CARD -->
+  <section>
+    <h2 class="text-2xl font-bold mb-5 flex items-center gap-2 text-gray-700">
+      <span class="material-symbols-outlined text-red-500">person_remove</span>
+      حذف مدیر
+    </h2>
+
+    <div class="bg-white shadow-lg rounded-2xl border border-gray-200 p-6 max-w-lg">
+      <form id="remove-admin-form" class="space-y-4">
+
+        <input name="email" type="email" placeholder="ایمیل مدیر"
+               class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-red-400 focus:border-red-500 transition"
+               required>
+
+        <button type="submit"
+                class="w-full py-2 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 transition flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined">delete</span>
+          حذف مدیر
+        </button>
+      </form>
+    </div>
+  </section>
+
 </main>
 
 <script>
+// --- CREATE ADMIN ---
 document.getElementById('new-admin-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const f = e.target;
@@ -54,6 +121,7 @@ document.getElementById('new-admin-form').addEventListener('submit', async (e) =
 });
 
 
+// --- DELETE ADMIN ---
 document.getElementById('remove-admin-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const f = e.target;
@@ -69,10 +137,12 @@ document.getElementById('remove-admin-form').addEventListener('submit', async (e
   alert(data.message || data.error);
 });
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
+
+// --- LOGOUT ---
+document.getElementById("logoutBtn").onclick = async () => {
   await fetch('/api/auth/logout', { method: 'POST' });
   location.href = "login.html";
-});
+};
 </script>
 
 </body>

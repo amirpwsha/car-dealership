@@ -3,25 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <title>مدیریت درخواست‌ها | خودرو۹۰</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <style>
+    body { font-family: "Vazirmatn", sans-serif; }
+  </style>
 </head>
 
-<body>
+<body class="bg-gray-50 min-h-screen">
 
-<header class="main-header">
-  <div class="logo">درخواست‌های خرید</div>
-  <nav class="main-nav">
-    <a href="admin-dashboard.html" class="nav-item">بازگشت</a>
-    <button id="logoutBtn" class="nav-item button-like">خروج</button>
-  </nav>
+<!-- Header -->
+<header class="bg-white border-b shadow-sm sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto py-4 px-4 flex justify-between items-center">
+    <h1 class="text-xl font-black text-gray-800 flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary text-3xl">approval</span>
+      مدیریت درخواست‌های خرید
+    </h1>
+
+    <div class="flex items-center gap-3">
+      <a href="admin-dashboard.html"
+         class="px-4 py-2 text-sm bg-gray-200 hover:bg-gray-300 rounded-lg transition">
+        بازگشت
+      </a>
+      <button id="logoutBtn"
+              class="px-4 py-2 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg transition">
+        خروج
+      </button>
+    </div>
+  </div>
 </header>
 
-<main class="cars-page">
-  <h1>درخواست‌های مشتریان</h1>
-  <div id="req-container" class="cars-container"></div>
+
+<!-- MAIN CONTENT -->
+<main class="max-w-6xl mx-auto px-4 py-8">
+
+  <h2 class="text-2xl font-bold mb-6 text-gray-700 text-center">
+    درخواست‌های مشتریان
+  </h2>
+
+  <div id="req-container"
+       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  </div>
+
 </main>
 
 <script>
+// ⭐ وضعیت رنگی
+function statusBadge(status) {
+  if (status === "approved")
+    return `<span class="px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-700 border border-green-300 flex items-center gap-1">
+              <span class="material-symbols-outlined text-base">check_circle</span> تایید شده
+            </span>`;
+
+  if (status === "pending")
+    return `<span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-700 border border-yellow-300 flex items-center gap-1">
+              <span class="material-symbols-outlined text-base animate-pulse">hourglass_top</span> در انتظار بررسی
+            </span>`;
+
+  return `<span class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-700 border border-red-300 flex items-center gap-1">
+            <span class="material-symbols-outlined text-base">cancel</span> رد شده
+          </span>`;
+}
+
+
+// ⭐ لود درخواست‌ها
 async function loadRequests() {
   const res = await fetch('/api/admin/requests/all', {
     credentials: "include"
@@ -34,23 +87,69 @@ async function loadRequests() {
   }
 
   const data = await res.json();
-  const c = document.getElementById('req-container');
+  const reqs = data.requests;
+  const box = document.getElementById("req-container");
 
-  c.innerHTML = data.requests.length === 0
-    ? "<p>هیچ درخواستی وجود ندارد.</p>"
-    : data.requests.map(r => `
-      <div class="car-card">
-        <h3>${r.brand} ${r.model}</h3>
-        <p>قیمت: ${Number(r.price).toLocaleString()} تومان</p>
-        <p>مشتری: ${r.username} (${r.email})</p>
-        <p>تاریخ درخواست: ${r.request_date}</p>
-        <p>وضعیت فعلی: <b>${r.status}</b></p>
-        <button class="buy-btn" onclick="approve(${r.id})">تأیید</button>
-        <button class="buy-btn" style="background:#c0392b;" onclick="reject(${r.id})">رد</button>
+  if (!reqs || reqs.length === 0) {
+    box.innerHTML = `
+      <div class="col-span-full text-center text-gray-500 py-16">
+        <span class="material-symbols-outlined text-6xl text-gray-400 mb-3">inbox</span>
+        <p class="text-lg">هیچ درخواستی وجود ندارد.</p>
+      </div>`;
+    return;
+  }
+
+  box.innerHTML = reqs.map(r => `
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition p-5 group">
+
+      <!-- عنوان -->
+      <h3 class="text-xl font-bold text-gray-800 group-hover:text-primary mb-3">
+        ${r.brand} ${r.model}
+      </h3>
+
+      <!-- قیمت -->
+      <p class="text-sm text-gray-600">
+        قیمت:
+        <span class="font-bold text-gray-800">${Number(r.price).toLocaleString()} تومان</span>
+      </p>
+
+      <!-- مشتری -->
+      <p class="text-sm text-gray-600 mt-1">
+        مشتری:
+        <span class="font-bold">${r.username}</span> (${r.email})
+      </p>
+
+      <!-- تاریخ -->
+      <p class="text-sm text-gray-500 mt-1">
+        تاریخ درخواست: <span class="font-bold">${r.request_date}</span>
+      </p>
+
+      <!-- وضعیت -->
+      <div class="mt-4">
+        ${statusBadge(r.status)}
       </div>
-    `).join('');
+
+      <!-- دکمه‌ها -->
+      <div class="flex gap-2 mt-5">
+        <button onclick="approve(${r.id})"
+                class="flex-1 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-bold transition flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-[18px]">check</span>
+          تایید
+        </button>
+
+        <button onclick="reject(${r.id})"
+                class="flex-1 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-bold transition flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+          رد
+        </button>
+      </div>
+
+    </div>
+  `).join('');
 }
 
+
+// ⭐ تایید درخواست
 async function approve(id) {
   const res = await fetch('/api/admin/requests/approve', {
     method: "POST",
@@ -63,6 +162,7 @@ async function approve(id) {
   loadRequests();
 }
 
+// ⭐ رد درخواست
 async function reject(id) {
   const res = await fetch('/api/admin/requests/reject', {
     method: "POST",
@@ -75,12 +175,15 @@ async function reject(id) {
   loadRequests();
 }
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
+
+// ⭐ خروج از حساب
+document.getElementById("logoutBtn").onclick = async () => {
   await fetch('/api/auth/logout', { method: 'POST' });
   location.href = "login.html";
-});
+};
 
 loadRequests();
+
 </script>
 
 </body>

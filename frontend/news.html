@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html class="light" dir="rtl" lang="fa"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>اخبار خودرو - دایرکتوری خودرو</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&amp;family=Work+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ff6600",
+                        "background-light": "#ffffff",
+                        "background-off-white": "#f9f9f9",
+                        "background-dark": "#23170f",
+                        "text-main": "#1d130c",
+                        "text-muted": "#6b5d54",
+                    },
+                    fontFamily: {
+                        "display": ["Vazirmatn", "sans-serif"],
+                        "body": ["Vazirmatn", "sans-serif"],
+                        "latin": ["Work Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d4d4d4;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff6600;
+        }
+    </style>
+</head>
+<body class="bg-background-off-white text-text-main font-body antialiased">
+<div class="relative flex min-h-screen flex-col overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-[#f0f0f0]">
+<div class="px-4 md:px-10 py-3 mx-auto max-w-7xl">
+<div class="flex items-center justify-between">
+<!-- Logo Section -->
+<div class="flex items-center gap-4">
+<div class="size-8 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.1739 20.1739L27.8261 5.82609C29.1366 7.13663 28.3989 10.1876 26.2002 13.7654C24.8538 15.9564 22.9595 18.3449 20.6522 20.6522C18.3449 22.9595 15.9564 24.8538 13.7654 26.2002C10.1876 28.3989 7.13663 29.1366 5.82609 27.8261L20.1739 42.1739C21.4845 43.4845 24.5355 42.7467 28.1133 40.548C30.3042 39.2016 32.6927 37.3073 35 35C37.3073 32.6927 39.2016 30.3042 40.548 28.1133C42.7467 24.5355 43.4845 21.4845 42.1739 20.1739Z" fill="currentColor"></path>
+<path clip-rule="evenodd" d="M7.24189 26.4066C7.31369 26.4411 7.64204 26.5637 8.52504 26.3738C9.59462 26.1438 11.0343 25.5311 12.7183 24.4963C14.7583 23.2426 17.0256 21.4503 19.238 19.238C21.4503 17.0256 23.2426 14.7583 24.4963 12.7183C25.5311 11.0343 26.1438 9.59463 26.3738 8.52504C26.5637 7.64204 26.4411 7.31369 26.4066 7.24189C26.345 7.21246 26.143 7.14535 25.6664 7.1918C24.9745 7.25925 23.9954 7.5498 22.7699 8.14278C20.3369 9.32007 17.3369 11.4915 14.4142 14.4142C11.4915 17.3369 9.32007 20.3369 8.14278 22.7699C7.5498 23.9954 7.25925 24.9745 7.1918 25.6664C7.14534 26.143 7.21246 26.345 7.24189 26.4066ZM29.9001 10.7285C29.4519 12.0322 28.7617 13.4172 27.9042 14.8126C26.465 17.1544 24.4686 19.6641 22.0664 22.0664C19.6641 24.4686 17.1544 26.465 14.8126 27.9042C13.4172 28.7617 12.0322 29.4519 10.7285 29.9001L21.5754 40.747C21.6001 40.7606 21.8995 40.931 22.8729 40.7217C23.9424 40.4916 25.3821 39.879 27.0661 38.8441C29.1062 37.5904 31.3734 35.7982 33.5858 33.5858C35.7982 31.3734 37.5904 29.1062 38.8441 27.0661C39.879 25.3821 40.4916 23.9425 40.7216 22.8729C40.931 21.8995 40.7606 21.6001 40.747 21.5754L29.9001 10.7285ZM29.2403 4.41187L43.5881 18.7597C44.9757 20.1473 44.9743 22.1235 44.6322 23.7139C44.2714 25.3919 43.4158 27.2666 42.252 29.1604C40.8128 31.5022 38.8165 34.012 36.4142 36.4142C34.012 38.8165 31.5022 40.8128 29.1604 42.252C27.2666 43.4158 25.3919 44.2714 23.7139 44.6322C22.1235 44.9743 20.1473 44.9757 18.7597 43.5881L4.41187 29.2403C3.29027 28.1187 3.08209 26.5973 3.21067 25.2783C3.34099 23.9415 3.8369 22.4852 4.54214 21.0277C5.96129 18.0948 8.43335 14.7382 11.5858 11.5858C14.7382 8.43335 18.0948 5.9613 21.0277 4.54214C22.4852 3.8369 23.9415 3.34099 25.2783 3.21067C26.5973 3.08209 28.1187 3.29028 29.2403 4.41187Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-text-main text-xl font-bold tracking-tight">دایرکتوری خودرو</h2>
+</div>
+<!-- Desktop Navigation -->
+<div class="hidden lg:flex flex-1 justify-center gap-8">
+<a href="index.html" class="text-text-main hover:text-primary transition-colors text-sm font-medium">خانه</a>
+
+<a href="cars.html" class="text-text-main hover:text-primary transition-colors text-sm font-medium">خرید خودرو</a>
+
+<a href="customer-dashboard.html" class="text-text-main hover:text-primary transition-colors text-sm font-medium">فروش خودرو</a>
+
+<a href="news.html" class="text-primary font-bold text-sm">اخبار و مقالات</a>
+
+<a href="#" class="text-text-main hover:text-primary transition-colors text-sm font-medium">تماس با ما</a>
+
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-4">
+<button class="hidden sm:flex text-text-main hover:text-primary p-2">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white hover:bg-orange-600 transition-colors text-sm font-bold shadow-sm">
+<a href="login.html"
+   class="flex cursor-pointer items-center justify-center rounded-lg h-10 px-6 bg-primary text-white hover:bg-orange-600 transition-colors text-sm font-bold shadow-sm">
+   ورود / ثبت نام
+</a>
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Wrapper -->
+<main class="flex-grow">
+<!-- Hero Section -->
+<div class="relative w-full py-6 md:py-10 px-4 md:px-10">
+<div class="mx-auto max-w-7xl">
+<div class="relative overflow-hidden rounded-2xl shadow-xl min-h-[400px] md:min-h-[500px] group">
+<!-- Background Image -->
+<div class="absolute inset-0 w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A sleek modern sports car driving on a coastal road at sunset" style='background-image: linear-gradient(to left, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 60%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAJTsxn8QjEe-1Py661-1CrEnraPAxlMSjRTIW6PAyw_SEu3bLHljq9lEqBnjL0wdNGIj9_CZ0HHsF9F618UrdpK3cEmXhBmUcmYC9Vv477dYdNvEtFNyW5SQs9XBFBrT9rWYY4DvSDk9BfoUXh088dBvKTnp0auzJ6r_74Owyc0AbXgGu4NTN05dXDB4SClKdk6LyqD9GY0sNlG7TNSxDVnb6gBm8oLomzwfgUNNy61uWn85nf8jzjosJxtNtdRZEqaF4XzScIOMI");'>
+</div>
+<!-- Content Overlay -->
+<div class="absolute inset-0 flex flex-col justify-end p-8 md:p-12 lg:w-2/3">
+<span class="inline-block w-fit bg-primary text-white text-xs font-bold px-3 py-1 rounded-full mb-4">ویژه</span>
+<h1 class="text-white text-3xl md:text-5xl font-black leading-tight mb-4 drop-shadow-md">
+                                رونمایی از نسل جدید خودروهای برقی در نمایشگاه بین‌المللی تهران
+                            </h1>
+<p class="text-gray-200 text-base md:text-lg mb-8 line-clamp-2 md:line-clamp-3 max-w-xl drop-shadow-sm">
+                                بررسی کامل مشخصات فنی، قیمت و زمان عرضه خودروهای برقی جدید که قرار است تحولی در بازار خودرو ایران ایجاد کنند.
+                            </p>
+<div class="flex flex-wrap gap-4">
+<button class="flex items-center justify-center h-12 px-6 bg-primary hover:bg-orange-600 text-white text-base font-bold rounded-lg transition-all shadow-lg hover:shadow-orange-500/30">
+                                    خواندن خبر کامل
+                                </button>
+<button class="flex items-center justify-center h-12 px-6 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white border border-white/50 text-base font-bold rounded-lg transition-all">
+                                    مشاهده ویدیو
+                                    <span class="material-symbols-outlined mr-2 text-xl">play_circle</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Search & Filters Section -->
+<div class="px-4 md:px-10 pb-8">
+<div class="mx-auto max-w-7xl">
+<div class="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between mb-8">
+<div class="w-full lg:w-1/2">
+<label class="flex flex-col w-full relative">
+<div class="flex w-full items-center rounded-xl bg-white shadow-sm border border-gray-100 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all overflow-hidden h-14">
+<div class="text-primary flex items-center justify-center pr-4 pl-2">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full bg-transparent border-none text-text-main placeholder:text-gray-400 focus:ring-0 h-full text-base font-normal px-2" placeholder="جستجو در اخبار، برندها یا مدل‌ها..."/>
+<button class="bg-gray-50 hover:bg-gray-100 text-primary font-bold h-full px-6 transition-colors border-r border-gray-100">
+                                        جستجو
+                                    </button>
+</div>
+</label>
+</div>
+<!-- Filter Chips -->
+<div class="w-full lg:w-auto overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
+<div class="flex gap-3 min-w-max">
+<button class="flex h-10 items-center justify-center gap-x-2 rounded-lg bg-primary text-white px-5 transition-transform active:scale-95 shadow-md shadow-orange-200">
+<span class="text-sm font-bold">همه اخبار</span>
+</button>
+<button class="group flex h-10 items-center justify-center gap-x-2 rounded-lg bg-white border border-gray-100 hover:border-primary/50 hover:bg-orange-50 px-4 transition-all">
+<span class="text-text-main text-sm font-medium group-hover:text-primary">داخلی</span>
+</button>
+<button class="group flex h-10 items-center justify-center gap-x-2 rounded-lg bg-white border border-gray-100 hover:border-primary/50 hover:bg-orange-50 px-4 transition-all">
+<span class="text-text-main text-sm font-medium group-hover:text-primary">وارداتی</span>
+</button>
+<button class="group flex h-10 items-center justify-center gap-x-2 rounded-lg bg-white border border-gray-100 hover:border-primary/50 hover:bg-orange-50 px-4 transition-all">
+<span class="text-text-main text-sm font-medium group-hover:text-primary">تکنولوژی</span>
+</button>
+<button class="group flex h-10 items-center justify-center gap-x-2 rounded-lg bg-white border border-gray-100 hover:border-primary/50 hover:bg-orange-50 px-4 transition-all">
+<span class="text-text-main text-sm font-medium group-hover:text-primary">قیمت روز</span>
+</button>
+<button class="group flex h-10 items-center justify-center gap-x-2 rounded-lg bg-white border border-gray-100 hover:border-primary/50 hover:bg-orange-50 px-4 transition-all">
+<span class="text-text-main text-sm font-medium group-hover:text-primary">تاریخ: جدیدترین</span>
+<span class="material-symbols-outlined text-gray-400 group-hover:text-primary text-sm">keyboard_arrow_down</span>
+</button>
+</div>
+</div>
+</div>
+<!-- News Grid Header -->
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-2xl font-bold text-text-main relative pr-4 before:content-[''] before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:w-1.5 before:h-8 before:bg-primary before:rounded-full">
+                            آخرین اخبار و مقالات
+                        </h2>
+<a class="text-primary text-sm font-bold hover:underline flex items-center gap-1" href="#">
+                            مشاهده آرشیو
+                            <span class="material-symbols-outlined text-lg">arrow_back</span>
+</a>
+</div>
+<!-- News Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+<!-- Card 1 -->
+<article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col group h-full">
+<div class="relative h-56 overflow-hidden">
+<div class="absolute inset-0 bg-gray-200 animate-pulse" style="display:none;"></div> <!-- Skeleton placeholder logic implied -->
+<img alt="Blue luxury sports car parked in a modern garage" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Blue luxury sports car parked in a modern garage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWG4JGqQwc9srd9ilibD9uNSAdXfuGZ8Ye0x5I79IUySzYgsWSRAKAAQeL0c6TBujK1YGKbVTuvop3es2zBnGkkfvv-NaZ-WmKP5v8dvUNBENKybj6VEKH_EuGAinMGBCoQbX6ngeMjnyp2wyoiVclKSEAW8ywC00jDqkUAw-6Jwdw-9HDW5ypD-_39QnQHHVPwm1XDA5duQdvkQEt25QnxtSBJqP6nZH7936jRJEC8af6i5tUTcTDSgwKyQqcYunjtKcDvFEh2jE"/>
+<span class="absolute top-4 right-4 bg-white/90 backdrop-blur text-text-main text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">
+                                    خودروهای خارجی
+                                </span>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<div class="flex items-center gap-2 text-xs text-text-muted mb-3 font-latin">
+<span class="material-symbols-outlined text-base text-primary">calendar_today</span>
+<span>۱۴۰۳/۰۲/۱۵</span>
+<span class="w-1 h-1 bg-gray-300 rounded-full mx-1"></span>
+<span>۵ دقیقه مطالعه</span>
+</div>
+<h3 class="text-lg font-bold text-text-main mb-3 leading-snug group-hover:text-primary transition-colors">
+                                    شورولت کوروت جدید: ترکیبی از قدرت و طراحی مدرن وارد بازار شد
+                                </h3>
+<p class="text-sm text-text-muted leading-relaxed mb-6 line-clamp-3">
+                                    نسل جدید شورولت کوروت با تغییرات بنیادین در موتور و طراحی داخلی رونمایی شد. این مدل جدید قرار است استانداردهای خودروهای اسپرت را تغییر دهد.
+                                </p>
+<div class="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+<a class="text-primary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all" href="#">
+                                        ادامه مطلب
+                                        <span class="material-symbols-outlined text-lg rtl:rotate-180">arrow_right_alt</span>
+</a>
+<button class="text-gray-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col group h-full">
+<div class="relative h-56 overflow-hidden">
+<img alt="Electric vehicle charging station with green light" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Electric vehicle charging station with green light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe0pdp8IjWEFnv8uRhfrhWyeISPSucfwJjtB19DksaPQBcp1DTKia0OF1pR_6-W2IwcaSEaChegiq379-4zxZsmurH9ge-6S78vGaNg2C_TlKd4JBhqOnRWpZk_1At2HWh_1Gs8a5LwAM4AFHzsfBtedyeLzJUY_mzRKu_JyOe1fhr1GR2EszCGLyzC02OhN5nRgMkxNpiixnscWWA0_hHOgpwyOgr0EatJggrKhF9Ct3eMgY9stECoyl4KkRRSge1T_Rc7iSC50o"/>
+<span class="absolute top-4 right-4 bg-white/90 backdrop-blur text-text-main text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">
+                                    تکنولوژی
+                                </span>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<div class="flex items-center gap-2 text-xs text-text-muted mb-3 font-latin">
+<span class="material-symbols-outlined text-base text-primary">calendar_today</span>
+<span>۱۴۰۳/۰۲/۱۴</span>
+<span class="w-1 h-1 bg-gray-300 rounded-full mx-1"></span>
+<span>۳ دقیقه مطالعه</span>
+</div>
+<h3 class="text-lg font-bold text-text-main mb-3 leading-snug group-hover:text-primary transition-colors">
+                                    توسعه ایستگاه‌های شارژ خودرو برقی در سراسر کشور
+                                </h3>
+<p class="text-sm text-text-muted leading-relaxed mb-6 line-clamp-3">
+                                    وزارت نیرو اعلام کرد تا پایان سال جاری، بیش از ۵۰۰ ایستگاه شارژ سریع در جاده‌های اصلی کشور نصب و راه اندازی خواهد شد.
+                                </p>
+<div class="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+<a class="text-primary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all" href="#">
+                                        ادامه مطلب
+                                        <span class="material-symbols-outlined text-lg rtl:rotate-180">arrow_right_alt</span>
+</a>
+<button class="text-gray-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col group h-full">
+<div class="relative h-56 overflow-hidden">
+<img alt="Crowd of people looking at cars in an exhibition hall" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Crowd of people looking at cars in an exhibition hall" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIqGdqU567u0sBBx9cIU9gFzAmsipPIRMJUuPMOn6mx_6dJ2cT9g5K4gAk025nmoEP6wjetlElTvLXIMEReR_xP3JtAuWEn9HTKi7o0CPml1Zq_Ju2E_66zs75KuNS4ALJuhLcv0w6BmRmC_lZRtlGXTAzfsPyd5YJRugm2wfWXrrpJo91S1qowE7bneBK2_NqOuwJICGJ5OSKmODtLF5L-X9YLIcZrMeCQZrJ9skQawJVJOc0W2kup-TXrgkGH6b5oxXbBUkh36E"/>
+<span class="absolute top-4 right-4 bg-white/90 backdrop-blur text-text-main text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">
+                                    نمایشگاه
+                                </span>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<div class="flex items-center gap-2 text-xs text-text-muted mb-3 font-latin">
+<span class="material-symbols-outlined text-base text-primary">calendar_today</span>
+<span>۱۴۰۳/۰۲/۱۲</span>
+<span class="w-1 h-1 bg-gray-300 rounded-full mx-1"></span>
+<span>۸ دقیقه مطالعه</span>
+</div>
+<h3 class="text-lg font-bold text-text-main mb-3 leading-snug group-hover:text-primary transition-colors">
+                                    گزارش اختصاصی از نمایشگاه خودرو مشهد
+                                </h3>
+<p class="text-sm text-text-muted leading-relaxed mb-6 line-clamp-3">
+                                    حضور پررنگ خودروسازان داخلی و معرفی ۳ محصول جدید سایپا و ایران خودرو در بیست و سومین نمایشگاه بین‌المللی خودرو مشهد.
+                                </p>
+<div class="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+<a class="text-primary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all" href="#">
+                                        ادامه مطلب
+                                        <span class="material-symbols-outlined text-lg rtl:rotate-180">arrow_right_alt</span>
+</a>
+<button class="text-gray-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 4 -->
+<article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col group h-full">
+<div class="relative h-56 overflow-hidden">
+<img alt="Dashboard of a modern car with digital display" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Dashboard of a modern car with digital display" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-VgGI5Kyu_3K0aECgQ5jkfxHCkOcNoDWpSftcsvPBm4OuHK-HPX3BN0LcsIOMM-7dFFl5kGkfd7O20l5HCzBSLPDREV1pfVWmd3IBxxx6InZ2i1_gjBjP_Ve_tE9lYSOtLvSMyZTkqF-DGVZ4egY14HZN1i1RJDgNEXygPmYh5lq9bJWAabN3dxMyefbceJQRZ3AIfUUK_ptfGznz5UZZJJiok4_QxImfn9OH30mg4XTuP76aT67SAG1qNyRiezAm75YZI5kJWWA"/>
+<span class="absolute top-4 right-4 bg-white/90 backdrop-blur text-text-main text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">
+                                    بررسی فنی
+                                </span>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<div class="flex items-center gap-2 text-xs text-text-muted mb-3 font-latin">
+<span class="material-symbols-outlined text-base text-primary">calendar_today</span>
+<span>۱۴۰۳/۰۲/۱۰</span>
+<span class="w-1 h-1 bg-gray-300 rounded-full mx-1"></span>
+<span>۱۲ دقیقه مطالعه</span>
+</div>
+<h3 class="text-lg font-bold text-text-main mb-3 leading-snug group-hover:text-primary transition-colors">
+                                    نقد و بررسی سیستم‌های هوشمند خودروهای چینی
+                                </h3>
+<p class="text-sm text-text-muted leading-relaxed mb-6 line-clamp-3">
+                                    آیا آپشن‌های پرتعداد خودروهای چینی کارآمد هستند؟ نگاهی دقیق به سیستم‌های مولتی‌مدیا و دستیار راننده در فونیکس و دیگنیتی.
+                                </p>
+<div class="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+<a class="text-primary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all" href="#">
+                                        ادامه مطلب
+                                        <span class="material-symbols-outlined text-lg rtl:rotate-180">arrow_right_alt</span>
+</a>
+<button class="text-gray-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 5 -->
+<article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col group h-full">
+<div class="relative h-56 overflow-hidden">
+<img alt="Close up of euro coins and car keys" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Close up of euro coins and car keys" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgqxq0f_ygUYv9M60KQsUHNEgUa_hOYD6NN1ilYJ14MxCJgJYpcc895FXPsnocjpu-FW8DdJRGx9PfL0qRHEReIkiF18S0Jhjah1ODZw6XEoAmWwboxEMTk1j3X6eOZ6tFtKMw7y_z93i6VM9YKV8zL9P60QDgkdoFAwrAumv3gSP8MBdQN21Xcwg69fwnEJ5iUDikeFXnu7I9TAN1bZMAgqnJuawCgDjMWdxW0TqgCq2ey_AIij2nhekbmRpEszNMiVTcBvtHeUc"/>
+<span class="absolute top-4 right-4 bg-white/90 backdrop-blur text-text-main text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">
+                                    قیمت بازار
+                                </span>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<div class="flex items-center gap-2 text-xs text-text-muted mb-3 font-latin">
+<span class="material-symbols-outlined text-base text-primary">calendar_today</span>
+<span>۱۴۰۳/۰۲/۰۸</span>
+<span class="w-1 h-1 bg-gray-300 rounded-full mx-1"></span>
+<span>۴ دقیقه مطالعه</span>
+</div>
+<h3 class="text-lg font-bold text-text-main mb-3 leading-snug group-hover:text-primary transition-colors">
+                                    افزایش ۵ درصدی قیمت خودروهای داخلی در هفته گذشته
+                                </h3>
+<p class="text-sm text-text-muted leading-relaxed mb-6 line-clamp-3">
+                                    تحلیل نوسانات قیمت در بازار آزاد؛ چرا با وجود وعده‌های کاهش قیمت، شاهد روند صعودی در بازار خودرو هستیم؟
+                                </p>
+<div class="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+<a class="text-primary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all" href="#">
+                                        ادامه مطلب
+                                        <span class="material-symbols-outlined text-lg rtl:rotate-180">arrow_right_alt</span>
+</a>
+<button class="text-gray-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 6 -->
+<article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col group h-full">
+<div class="relative h-56 overflow-hidden">
+<img alt="Mechanic working on a car engine" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Mechanic working on a car engine" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM3iHZM4K5ME1d1-Ta3iq9LV_Mhu2Wn70wYNg4S8A6aVdiiRb2KsOxXGWRNJT6lyQoDMVnDDPqdOd5KvmC2Cg15xrTyFREg5NcqZDx0MiDlh-tWr8fSTMEEmGlHe14rzKamk18gWmvopGZFHqEAg2meE4S6CaEV_yRidhUNehp7plFucwhQbjJT1wlb278F90nSGE8dd9vByaM2xfB_8oHUpH0ttWnQuZDtT7ZcJeLplMD11oDmCrhvZjZsbqwFJS1Zioe3ZjpXkg"/>
+<span class="absolute top-4 right-4 bg-white/90 backdrop-blur text-text-main text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm">
+                                    آموزشی
+                                </span>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<div class="flex items-center gap-2 text-xs text-text-muted mb-3 font-latin">
+<span class="material-symbols-outlined text-base text-primary">calendar_today</span>
+<span>۱۴۰۳/۰۲/۰۵</span>
+<span class="w-1 h-1 bg-gray-300 rounded-full mx-1"></span>
+<span>۱۰ دقیقه مطالعه</span>
+</div>
+<h3 class="text-lg font-bold text-text-main mb-3 leading-snug group-hover:text-primary transition-colors">
+                                    ۵ نشانه خرابی گیربکس اتوماتیک که باید جدی بگیرید
+                                </h3>
+<p class="text-sm text-text-muted leading-relaxed mb-6 line-clamp-3">
+                                    راهنمای جامع نگهداری از گیربکس‌های اتوماتیک و نشانه‌هایی که خبر از هزینه‌های سنگین تعمیرات در آینده می‌دهند.
+                                </p>
+<div class="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+<a class="text-primary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all" href="#">
+                                        ادامه مطلب
+                                        <span class="material-symbols-outlined text-lg rtl:rotate-180">arrow_right_alt</span>
+</a>
+<button class="text-gray-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- Pagination -->
+<div class="flex justify-center mb-16">
+<div class="flex gap-2">
+<button class="size-10 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:border-primary hover:text-primary transition-colors disabled:opacity-50">
+<span class="material-symbols-outlined rtl:rotate-180">chevron_right</span>
+</button>
+<button class="size-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold shadow-lg shadow-orange-200">
+                                ۱
+                            </button>
+<button class="size-10 flex items-center justify-center rounded-lg border border-gray-200 text-text-main font-medium hover:border-primary hover:text-primary transition-colors">
+                                ۲
+                            </button>
+<button class="size-10 flex items-center justify-center rounded-lg border border-gray-200 text-text-main font-medium hover:border-primary hover:text-primary transition-colors">
+                                ۳
+                            </button>
+<div class="size-10 flex items-center justify-end tracking-widest text-gray-400 pb-2">...</div>
+<button class="size-10 flex items-center justify-center rounded-lg border border-gray-200 text-text-main font-medium hover:border-primary hover:text-primary transition-colors">
+                                ۱۰
+                            </button>
+<button class="size-10 flex items-center justify-center rounded-lg border border-gray-200 text-text-main hover:border-primary hover:text-primary transition-colors">
+<span class="material-symbols-outlined rtl:rotate-180">chevron_left</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Newsletter Section -->
+<div class="bg-text-main text-white py-16 px-4 md:px-10 mt-auto">
+<div class="mx-auto max-w-4xl text-center">
+<div class="inline-flex items-center justify-center p-3 bg-white/10 rounded-full mb-6">
+<span class="material-symbols-outlined text-3xl text-primary">mail</span>
+</div>
+<h2 class="text-2xl md:text-3xl font-bold mb-4">عضویت در خبرنامه خودرویی</h2>
+<p class="text-gray-300 mb-8 max-w-xl mx-auto">
+                        آخرین اخبار، تحلیل‌های بازار و آگهی‌های ویژه را هر هفته در ایمیل خود دریافت کنید. بدون اسپم، فقط محتوای ارزشمند.
+                    </p>
+<form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+<input class="flex-1 h-12 rounded-lg bg-white/10 border border-white/20 px-4 text-white placeholder:text-gray-400 focus:ring-2 focus:ring-primary focus:border-transparent text-left dir-ltr" placeholder="آدرس ایمیل خود را وارد کنید" type="email"/>
+<button class="h-12 px-8 rounded-lg bg-primary hover:bg-orange-600 text-white font-bold transition-colors" type="button">
+                            عضویت
+                        </button>
+</form>
+</div>
+</div>
+</main>
+<!-- Footer Simple -->
+<footer class="bg-[#150d09] text-gray-400 py-8 text-center text-sm border-t border-white/5">
+<p>© ۱۴۰۳ دایرکتوری خودرو. تمامی حقوق محفوظ است.</p>
+</footer>
+</div>
+</body></html>

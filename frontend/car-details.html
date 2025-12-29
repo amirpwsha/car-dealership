@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html class="light" dir="rtl" lang="fa">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title id="page-title">جزئیات خودرو - خودرو۹۰</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <!-- Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#ff6600",
+            "primary-hover": "#e65c00",
+            "background-light": "#f5f7fa",
+            "background-dark": "#23170f",
+            "surface": "#ffffff",
+            "text-main": "#1d130c",
+            "text-secondary": "#6b7280",
+            "border-color": "#e5e7eb"
+          },
+          fontFamily: {
+            "display": ["Vazirmatn", "sans-serif"],
+            "body": ["Vazirmatn", "sans-serif"],
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem",
+            "lg": "0.75rem",
+            "xl": "1rem",
+            "2xl": "1.5rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Vazirmatn', sans-serif; }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+
+<body class="bg-background-light text-text-main antialiased min-h-screen flex flex-col">
+
+  <!-- Main Content -->
+  <main class="flex-grow py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" class="flex mb-6 text-sm text-text-secondary">
+      <ol class="inline-flex items-center space-x-1 space-x-reverse md:space-x-2 md:space-x-reverse">
+        <li class="inline-flex items-center">
+          <a class="inline-flex items-center hover:text-primary transition-colors" href="index.html">
+            <span class="material-symbols-outlined text-lg ml-1">home</span>
+            خانه
+          </a>
+        </li>
+
+        <li>
+          <div class="flex items-center">
+            <span class="material-symbols-outlined text-lg mx-1 text-gray-400">chevron_left</span>
+            <a class="hover:text-primary transition-colors" href="cars.html">خودروها</a>
+          </div>
+        </li>
+
+        <li aria-current="page">
+          <div class="flex items-center">
+            <span class="material-symbols-outlined text-lg mx-1 text-gray-400">chevron_left</span>
+            <span id="breadcrumb-title" class="text-text-main font-medium">جزئیات خودرو</span>
+          </div>
+        </li>
+      </ol>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- RIGHT COLUMN -->
+      <div class="lg:col-span-8 space-y-8">
+
+        <!-- Mobile Title -->
+        <div class="lg:hidden bg-surface rounded-2xl p-6 shadow-sm border border-border-color">
+          <h1 id="car-title-mobile" class="text-2xl font-black mb-2">...</h1>
+          <p id="car-subtitle-mobile" class="text-text-secondary text-sm">...</p>
+          <div class="text-primary text-2xl font-black text-left mt-2" dir="ltr">
+            <span id="price-mobile">...</span> <span class="text-sm text-text-secondary">تومان</span>
+          </div>
+        </div>
+
+        <!-- Gallery -->
+        <div class="space-y-4">
+          <div class="aspect-video w-full bg-gray-100 rounded-2xl overflow-hidden relative shadow-sm">
+            <div id="main-image"
+                 class="w-full h-full bg-center bg-cover transition-transform duration-500"></div>
+            <div
+              class="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-sm flex items-center gap-2">
+              <span class="material-symbols-outlined text-sm">photo_camera</span>
+              <span id="image-counter">۰ تصویر</span>
+            </div>
+          </div>
+
+          <div id="thumbs" class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide"></div>
+        </div>
+
+        <!-- Description -->
+        <div class="bg-surface rounded-2xl p-6 shadow-sm border border-border-color">
+          <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+            <span class="w-1 h-6 bg-primary rounded-full"></span>
+            توضیحات فروشنده
+          </h2>
+          <p id="description" class="text-text-secondary leading-loose"></p>
+        </div>
+
+        <!-- Specs -->
+        <div class="bg-surface rounded-2xl p-6 shadow-sm border border-border-color">
+          <h2 class="text-lg font-bold mb-6 flex items-center gap-2">
+            <span class="w-1 h-6 bg-primary rounded-full"></span>
+            مشخصات فنی و آپشن‌ها
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-12">
+
+            <div class="spec-row"><span>کارکرد</span> <span id="spec-mileage">-</span></div>
+            <div class="spec-row"><span>گیربکس</span> <span id="spec-gearbox">-</span></div>
+            <div class="spec-row"><span>سوخت</span> <span id="spec-fuel">-</span></div>
+            <div class="spec-row"><span>تیپ</span> <span id="spec-trim">-</span></div>
+            <div class="spec-row"><span>رنگ بدنه</span> <span id="spec-color">-</span></div>
+            <div class="spec-row"><span>رنگ داخل</span> <span id="spec-interior">-</span></div>
+            <div class="spec-row"><span>وضعیت بدنه</span> <span id="spec-body">-</span></div>
+            <div class="spec-row"><span>موتور</span> <span id="spec-engiine">-</span></div>
+            <div class="spec-row"><span>شاسی</span> <span id="spec-chassis">-</span></div>
+            <div class="spec-row"><span>کشور سازنده</span> <span id="spec-origin">-</span></div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- LEFT COLUMN -->
+      <div class="lg:col-span-4 space-y-6">
+        <div class="bg-surface rounded-2xl p-6 shadow-lg border border-border-color sticky top-24">
+          <h1 id="car-title-desktop" class="text-2xl font-black mb-2">...</h1>
+          <p id="car-subtitle-desktop" class="text-text-secondary text-sm mb-4">...</p>
+
+          <div class="text-primary text-3xl font-black" dir="ltr">
+            <span id="price-desktop">...</span>
+            <span class="text-sm text-text-secondary">تومان</span>
+          </div>
+
+          <button
+            class="w-full bg-primary hover:bg-primary-hover text-white font-bold h-12 rounded-xl mt-6 flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">call</span>
+            تماس با فروشنده
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <style>
+    .spec-row {
+      display: flex; justify-content: space-between; padding: 12px 0;
+      border-bottom: 1px dashed #ddd; color: #444;
+    }
+  </style>
+
+  <!-- FINAL JS -->
+  <script>
+    function formatPrice(price) {
+      return Number(price || 0).toLocaleString("fa-IR");
+    }
+
+    function setText(id, value, fallback = "-") {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value && value !== "null" ? value : fallback;
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+
+      if (!id) return alert("شناسه خودرو نامعتبر است");
+
+      try {
+        const res = await fetch("/api/cars/" + id);
+        const data = await res.json();
+
+        if (!res.ok) return alert(data.error);
+
+        const title = `${data.brand} ${data.model} ${data.year}`.trim();
+        const subtitle = data.status === "sold" ? "فروخته شده" : "موجود";
+
+        setText("page-title", "جزئیات خودرو - " + title);
+        setText("breadcrumb-title", title);
+
+        setText("car-title-mobile", title);
+        setText("car-title-desktop", title);
+        setText("car-subtitle-mobile", subtitle);
+        setText("car-subtitle-desktop", subtitle);
+
+        const priceFormatted = formatPrice(data.price);
+        setText("price-mobile", priceFormatted);
+        setText("price-desktop", priceFormatted);
+
+        // Specs
+        setText("spec-mileage", data.mileage);
+        setText("spec-gearbox", data.gearbox);
+        setText("spec-fuel", data.fuel);
+        setText("spec-trim", data.trim);
+        setText("spec-color", data.color);
+        setText("spec-interior", data.interior_color);
+        setText("spec-body", data.body_condition);
+        setText("spec-engiine", data.engiine);
+        setText("spec-chassis", data.chassis);
+        setText("spec-origin", data.origin);
+
+        // Description
+        setText("description", data.description, "برای این خودرو توضیحی ثبت نشده است.");
+
+        // Gallery
+        const images = data.images || [];
+        const mainImage = document.getElementById("main-image");
+        const thumbs = document.getElementById("thumbs");
+        const counter = document.getElementById("image-counter");
+
+        if (images.length > 0) {
+          mainImage.style.backgroundImage = `url('${images[0]}')`;
+          counter.textContent = images.length + " تصویر";
+
+          thumbs.innerHTML = "";
+          images.forEach((url, i) => {
+            const btn = document.createElement("button");
+            btn.className =
+              "w-24 aspect-video rounded-lg overflow-hidden border " +
+              (i === 0 ? "border-primary" : "border-gray-300");
+
+            btn.innerHTML =
+              `<div class="w-full h-full bg-center bg-cover" style="background-image:url('${url}')"></div>`;
+
+            btn.onclick = () => {
+              mainImage.style.backgroundImage = `url('${url}')`;
+            };
+
+            thumbs.appendChild(btn);
+          });
+        } else {
+          counter.textContent = "بدون تصویر";
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert("خطای غیرمنتظره در دریافت اطلاعات خودرو");
+      }
+    });
+  </script>
+
+</body>
+</html>

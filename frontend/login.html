@@ -1,57 +1,290 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html class="light" dir="rtl" lang="fa">
 <head>
-  <meta charset="UTF-8">
-  <title>ورود | خودرو۹۰</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>ورود به حساب کاربری | دایرکتوری خودرو</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Vazirmatn:wght@100..900&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#ff6600",
+            "background-light": "#fcf9f8",
+            "background-dark": "#23170f",
+            "text-main": "#1d130c",
+            "border-color": "#ead8cd",
+          },
+          fontFamily: {
+            "display": ["Vazirmatn", "Manrope", "sans-serif"],
+            "body": ["Vazirmatn", "sans-serif"],
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 20px;
+    }
+  </style>
 </head>
 
-<body class="auth-page">
-  <div class="auth-card">
-    <h1>ورود</h1>
+<body class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden font-display text-text-main dark:text-white transition-colors duration-300">
 
-    <form id="login-form">
-      <input name="email" type="email" placeholder="ایمیل" required>
-      <input name="password" type="password" placeholder="رمز عبور" required>
-      <button type="submit">ورود</button>
-    </form>
+  <!-- Navbar -->
+  <nav class="w-full z-20 border-b border-solid border-b-[#f4ece6] dark:border-b-[#3a281a] bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md sticky top-0">
+    <div class="px-6 lg:px-10 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3 text-text-main dark:text-white cursor-pointer select-none">
+        <div class="size-8 text-primary">
+          <svg class="w-full h-full" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z" fill="currentColor"></path>
+          </svg>
+        </div>
+        <h2 class="text-xl font-bold tracking-tight">دایرکتوری خودرو</h2>
+      </div>
 
-    <p id="msg"></p>
-    <a href="signup.html">حساب ندارم → ثبت‌نام</a>
-        <a href="index.html" style="color:#f7931e; margin-top:10px; display:block;">
-    ← بازگشت به صفحه اصلی
+      <div class="flex items-center gap-4">
+        <a class="hidden md:flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-primary transition-colors" href="#">
+          <span class="material-symbols-outlined text-[20px]">help</span>
+          پشتیبانی
         </a>
-  </div>
+        <button id="back-home-btn" class="group flex items-center justify-center gap-2 rounded-lg bg-primary/10 dark:bg-primary/20 hover:bg-primary hover:text-white text-primary px-4 py-2.5 transition-all duration-300">
+          <span class="text-sm font-bold">بازگشت به خانه</span>
+          <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform rtl:rotate-180">arrow_right_alt</span>
+        </button>
+      </div>
+    </div>
+  </nav>
 
-<script>
-document.getElementById('login-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
+  <!-- Main -->
+  <main class="flex-1 flex flex-col lg:flex-row h-full">
+    <!-- Right / Form -->
+    <div class="w-full lg:w-1/2 flex flex-col justify-center items-center p-6 lg:p-12 xl:p-20 relative z-10">
+      <div class="w-full max-w-[480px] flex flex-col gap-2">
 
-  const f = e.target;
-  const payload = {
-    email: f.email.value,
-    password: f.password.value
-  };
+        <div class="flex flex-col items-start gap-3 mb-8">
+          <div class="size-12 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-primary mb-2">
+            <span class="material-symbols-outlined text-[28px]">lock</span>
+          </div>
+          <h1 class="text-3xl lg:text-4xl font-bold text-text-main dark:text-white leading-tight">ورود به حساب کاربری</h1>
+          <p class="text-gray-500 dark:text-gray-400 text-base leading-relaxed">
+            برای دسترسی به پنل مدیریت آگهی‌ها، لطفا ایمیل و رمز عبور خود را وارد کنید.
+          </p>
+        </div>
 
-  const res = await fetch('/api/auth/login', {
-    method:'POST',
-    headers:{ 'Content-Type':'application/json' },
-    body: JSON.stringify(payload)
-  });
+        <!-- 🔴 Box خطا -->
+        <div id="error-box" class="hidden mb-4 rounded-xl border border-red-200 bg-red-50 text-red-700 text-sm px-3 py-2 flex items-center gap-2">
+          <span class="material-symbols-outlined text-[18px]">error</span>
+          <span id="error-text"></span>
+        </div>
 
-  const data = await res.json();
-  document.getElementById('msg').textContent = data.message || data.error;
+        <!-- فرم ورود -->
+        <form id="login-form" class="flex flex-col gap-6 w-full" onsubmit="event.preventDefault();">
+          <div class="flex flex-col gap-2">
+            <label class="text-text-main dark:text-gray-200 text-sm font-semibold flex items-center gap-1" for="email">
+              ایمیل
+              <span class="text-red-500">*</span>
+            </label>
+            <div class="relative group">
+              <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+                <span class="material-symbols-outlined">mail</span>
+              </div>
+              <input
+                class="form-input block w-full rounded-xl border-border-color bg-white dark:bg-[#2f2016] dark:border-[#4a3528] text-text-main dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:border-primary focus:ring-primary focus:ring-1 h-14 pr-11 pl-4 text-lg font-medium transition-all shadow-sm"
+                dir="ltr" id="email" name="email" placeholder="name@example.com" type="email" />
+            </div>
+          </div>
 
-  // ✅ انتخاب مسیر بر اساس نقش
-  if (res.ok) {
-    if (data.role === "admin") {
-      location.href = "admin-dashboard.html";
-    } else {
-      location.href = "customer-dashboard.html";
+          <div class="flex flex-col gap-2">
+            <label class="text-text-main dark:text-gray-200 text-sm font-semibold flex items-center gap-1" for="password">
+              رمز عبور
+              <span class="text-red-500">*</span>
+            </label>
+            <div class="relative group">
+              <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+                <span class="material-symbols-outlined">key</span>
+              </div>
+              <input
+                class="form-input block w-full rounded-xl border-border-color bg-white dark:bg-[#2f2016] dark:border-[#4a3528] text-text-main dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:border-primary focus:ring-primary focus:ring-1 h-14 pr-11 pl-4 text-lg font-medium transition-all shadow-sm"
+                dir="ltr" id="password" name="password" placeholder="••••••••" type="password" />
+            </div>
+            <div class="flex justify-end">
+              <a class="text-sm text-primary hover:text-orange-600 font-medium transition-colors" href="#">
+                فراموشی رمز عبور
+              </a>
+            </div>
+          </div>
+
+          <button id="login-btn"
+            class="relative w-full h-14 bg-primary hover:bg-orange-600 text-white font-bold text-lg rounded-xl shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 transition-all duration-300 flex items-center justify-center gap-2 overflow-hidden group">
+            <span class="material-symbols-outlined">login</span>
+            <span id="login-btn-text">ورود</span>
+          </button>
+
+          <div class="relative flex py-2 items-center">
+            <div class="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
+            <span class="flex-shrink-0 mx-4 text-gray-400 text-xs">یا</span>
+            <div class="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
+          </div>
+
+          <button type="button"
+            class="w-full h-12 bg-white dark:bg-[#2f2016] border border-gray-200 dark:border-[#4a3528] hover:bg-gray-50 dark:hover:bg-[#3a281a] text-text-main dark:text-gray-200 font-medium text-base rounded-xl transition-all flex items-center justify-center gap-3">
+            <span class="material-symbols-outlined text-gray-500">smartphone</span>
+            ورود با شماره موبایل
+          </button>
+        </form>
+
+        <div class="mt-8 text-center">
+          <p class="text-xs text-gray-400 leading-relaxed">
+            با ورود به دایرکتوری خودرو،
+            <a class="text-primary hover:underline underline-offset-4" href="#">قوانین و مقررات</a>
+            و
+            <a class="text-primary hover:underline underline-offset-4" href="#">حریم خصوصی</a>
+            را می‌پذیرید.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Left / Image -->
+    <div class="hidden lg:block lg:w-1/2 relative overflow-hidden bg-gray-900">
+      <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 z-10 mix-blend-overlay"></div>
+      <img class="absolute inset-0 w-full h-full object-cover object-center"
+        data-alt="Modern luxury car in dark studio setting with cinematic lighting"
+        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYjkl8GuZCq08enCxQ3xmRgK_OQiI_iDAMESvTsEtbjj3nE-KY-ExUibCRYsQMhACtSmjWV7hsLfuSkAApCHELhhvBZAW98-50XOp8ZnAo7PEND14XFf7fn3NOhlO1t0ZilAn_o7TvuVx_C2NmpLleuu0q1P5CNguxHXkJqU9v2KtogPqn4asE6XTcDU4LP_t6TsO_7ma-1hBMUsaOuF6mTTUy-OXonTRWahP99zjzGID-qi3COGhRIOBiOCee5BbP9XrDSCj50Qk" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10"></div>
+      <div class="absolute inset-0 bg-primary/20 mix-blend-overlay z-10"></div>
+      <div class="absolute bottom-0 right-0 w-full p-12 z-20 flex flex-col items-start text-white">
+        <div class="bg-primary/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-bold mb-4 shadow-lg shadow-orange-500/20">
+          ویژه نمایشگاه‌داران
+        </div>
+        <h3 class="text-4xl font-extrabold mb-3 leading-tight">
+          مدیریت هوشمند<br/>آگهی‌های خودرو
+        </h3>
+        <p class="text-gray-200 text-lg max-w-md opacity-90 leading-relaxed">
+          با پیوستن به دایرکتوری خودرو، ویترین دیجیتال نمایشگاه خود را بسازید و به هزاران مشتری بالقوه دسترسی پیدا کنید.
+        </p>
+        <div class="flex gap-8 mt-8 border-t border-white/20 pt-6 w-full">
+          <div>
+            <p class="text-2xl font-bold font-manrope">۲.۵K+</p>
+            <p class="text-xs text-gray-300">خودرو ثبت شده</p>
+          </div>
+          <div>
+            <p class="text-2xl font-bold font-manrope">۱۵۰+</p>
+            <p class="text-xs text-gray-300">نمایشگاه فعال</p>
+          </div>
+          <div>
+            <p class="text-2xl font-bold font-manrope">٪۹۸</p>
+            <p class="text-xs text-gray-300">رضایت کاربران</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 👇 اسکریپت اتصال به بک‌اند -->
+  <script>
+    const form = document.getElementById("login-form");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const errorBox = document.getElementById("error-box");
+    const errorText = document.getElementById("error-text");
+    const loginBtn = document.getElementById("login-btn");
+    const loginBtnText = document.getElementById("login-btn-text");
+    const backHomeBtn = document.getElementById("back-home-btn");
+
+    // بازگشت به خانه
+    backHomeBtn.addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
+
+    function showError(msg) {
+      errorText.textContent = msg;
+      errorBox.classList.remove("hidden");
     }
-  }
-});
-</script>
+
+    function hideError() {
+      errorBox.classList.add("hidden");
+      errorText.textContent = "";
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      hideError();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      if (!email || !password) {
+        showError("لطفاً ایمیل و رمز عبور را وارد کنید.");
+        return;
+      }
+
+      // حالت لودینگ روی دکمه
+      loginBtn.disabled = true;
+      loginBtn.classList.add("opacity-75", "cursor-not-allowed");
+      loginBtnText.textContent = "در حال ورود...";
+
+      try {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          showError(data.error || "ورود ناموفق بود.");
+        } else {
+          // نقش کاربر را از پاسخ بگیر
+          const role = data.role || (data.user && data.user.role);
+
+          if (role === "admin") {
+            window.location.href = "admin-dashboard.html";
+          } else {
+            window.location.href = "customer-dashboard.html";
+          }
+        }
+      } catch (err) {
+        console.error(err);
+        showError("خطا در اتصال به سرور. لطفاً دوباره تلاش کنید.");
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.classList.remove("opacity-75", "cursor-not-allowed");
+        loginBtnText.textContent = "ورود";
+      }
+    });
+  </script>
 
 </body>
 </html>

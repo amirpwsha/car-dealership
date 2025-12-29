@@ -2,59 +2,295 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>لیست خودروها | خودرو۹۰</title>
-  <link rel="stylesheet" href="style.css">
+  <title>جستجوی خودرو | KHODRO 90</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: "Vazirmatn", sans-serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
 </head>
 
-<body>
+<body class="bg-gray-50">
 
-<header class="main-header">
-  <div class="logo">KHODRO 90</div>
-  <nav class="main-nav">
-    <a href="index.html" class="nav-item">خانه</a>
-    <a href="login.html" class="nav-item">ورود</a>
-    <a href="signup.html" class="nav-item">ثبت‌نام</a>
+<!-- Header -->
+<header class="bg-white border-b shadow-sm py-4 px-8 flex justify-between items-center">
+  <nav class="flex gap-6 text-sm font-medium text-gray-800 items-center">
+    <a href="index.html" class="hover:text-orange-500">خانه</a>
+    <a href="cars.html" class="text-orange-500 font-bold">جستجو</a>
+    <a href="login.html" class="hover:text-orange-500">ورود</a>
+    <a href="signup.html"
+       class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 font-bold">
+      ثبت‌نام
+    </a>
   </nav>
+
+  <h1 class="text-xl font-black tracking-wide text-gray-900">KHODRO 90</h1>
 </header>
 
-<main style="padding:80px 40px;">
-  <h1>لیست خودروها</h1>
+<!-- Hero -->
+<section class="bg-gradient-to-l from-orange-500 to-orange-700 text-white py-16 text-center">
+  <h2 class="text-3xl font-black mb-3">جستجوی خودروهای موجود</h2>
+  <p class="text-sm opacity-90">خودروی موردنظر خود را سریع و هوشمند پیدا کنید</p>
+</section>
 
-  <div id="cars-container" class="cars-container"></div>
-</main>
+<!-- Filters -->
+<section class="max-w-7xl mx-auto -mt-10 bg-white rounded-2xl shadow-xl p-6">
+  <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+
+    <input id="f-model" placeholder="مدل یا برند"
+      class="border rounded-lg px-4 py-3 text-sm">
+
+    <input id="f-minPrice" type="number" placeholder="حداقل قیمت"
+      class="border rounded-lg px-4 py-3 text-sm">
+
+    <input id="f-maxPrice" type="number" placeholder="حداکثر قیمت"
+      class="border rounded-lg px-4 py-3 text-sm">
+
+    <input id="f-minYear" type="number" placeholder="سال از"
+      class="border rounded-lg px-4 py-3 text-sm">
+
+    <!-- فقط ظاهری -->
+    <input id="f-maxYear" type="number" placeholder="سال تا"
+      class="border rounded-lg px-4 py-3 text-sm">
+
+    <div class="flex gap-2">
+      <button id="btn-search"
+        class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-lg">
+        جستجو
+      </button>
+
+      <button id="btn-all"
+        class="flex-1 bg-gray-200 hover:bg-gray-300 font-bold rounded-lg">
+        نمایش همه
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Brand Menu (Dynamic) -->
+  <div class="mt-6">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="font-bold text-gray-800">فیلتر برند</h3>
+      <span id="brand-count" class="text-xs text-gray-500"></span>
+    </div>
+
+    <div id="brand-menu" class="flex gap-2 overflow-x-auto no-scrollbar pb-2"></div>
+  </div>
+</section>
+
+<!-- Cars -->
+<section class="max-w-7xl mx-auto px-6 py-16">
+  <div id="cars-container"
+       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+  </div>
+</section>
 
 <script>
-// ------------------------
-// گرفتن لیست خودروها
-// ------------------------
+  // ----------------------------
+  // State
+  // ----------------------------
+  let allCars = [];
+  let currentBrand = "ALL";     // برند انتخابی از منو
+  let lastMode = "ALL";         // ALL | SEARCH
+  let lastSearchUrl = "/api/cars";
 
-async function loadCars() {
-  const res = await fetch("/api/cars");
-  const cars = await res.json();
+  // ----------------------------
+  // Helpers
+  // ----------------------------
+  function normalizeBrand(b) {
+    return (b || "").toString().trim();
+  }
 
-  const container = document.getElementById("cars-container");
+  function formatPrice(n) {
+    try { return Number(n || 0).toLocaleString("fa-IR"); }
+    catch { return n; }
+  }
 
-  container.innerHTML = cars.map(car => `
-    <div class="car-card">
-      <h3>${car.brand} ${car.model}</h3>
-      <p>قیمت: ${Number(car.price).toLocaleString()} تومان</p>
+  function setActiveBrandBtn() {
+    const menu = document.getElementById("brand-menu");
+    if (!menu) return;
+    [...menu.querySelectorAll("button[data-brand]")].forEach(btn => {
+      const b = btn.getAttribute("data-brand");
+      const active = (b === currentBrand);
+      btn.className =
+        "px-4 py-2 rounded-full text-sm font-bold border transition whitespace-nowrap " +
+        (active
+          ? "bg-orange-500 text-white border-orange-500"
+          : "bg-white text-gray-700 border-gray-200 hover:border-orange-300 hover:text-orange-600");
+    });
+  }
 
-      <div class="car-images">
-        ${
-          car.images.length
-          ? car.images.map(imgObj => `
-              <img src="/${imgObj.url}"
-               style="width:100px; height:70px; object-fit:cover; border-radius:6px;">
-            `).join('')
-          : "<p>بدون عکس</p>"
-        }
-      </div>
-    </div>
-  `).join('');
-}
+  function buildBrandMenu(cars) {
+    const menu = document.getElementById("brand-menu");
+    const count = document.getElementById("brand-count");
+    if (!menu) return;
 
-loadCars();
+    const brands = Array.from(new Set(
+      (cars || []).map(c => normalizeBrand(c.brand)).filter(Boolean)
+    )).sort((a,b) => a.localeCompare(b, "fa"));
 
+    count.textContent = `${brands.length} برند`;
+
+    // دکمه "همه"
+    menu.innerHTML = `
+      <button data-brand="ALL">همه</button>
+    `;
+
+    // بقیه برندها
+    brands.forEach(b => {
+      const safe = b.replace(/"/g, "&quot;");
+      menu.innerHTML += `<button data-brand="${safe}">${b}</button>`;
+    });
+
+    // Events
+    [...menu.querySelectorAll("button[data-brand]")].forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentBrand = btn.getAttribute("data-brand") || "ALL";
+        setActiveBrandBtn();
+        applyBrandFilterAndRender();
+      });
+    });
+
+    setActiveBrandBtn();
+  }
+
+  function applyBrandFilter(cars) {
+    if (!cars) return [];
+    if (currentBrand === "ALL") return cars;
+    return cars.filter(c => normalizeBrand(c.brand) === currentBrand);
+  }
+
+  function applyBrandFilterAndRender() {
+    const filtered = applyBrandFilter(allCars);
+    renderCars(filtered);
+  }
+
+  // ----------------------------
+  // API
+  // ----------------------------
+  async function fetchCars(url = "/api/cars") {
+    lastMode = "ALL";
+    lastSearchUrl = url;
+
+    const res = await fetch(url);
+    const cars = await res.json();
+
+    allCars = Array.isArray(cars) ? cars : [];
+    // اگر برند انتخابی دیگه وجود نداشت برگرده روی ALL
+    const brandsNow = new Set(allCars.map(c => normalizeBrand(c.brand)));
+    if (currentBrand !== "ALL" && !brandsNow.has(currentBrand)) currentBrand = "ALL";
+
+    buildBrandMenu(allCars);
+    applyBrandFilterAndRender();
+  }
+
+  async function searchCars() {
+    lastMode = "SEARCH";
+
+    const model = document.getElementById("f-model").value.trim();
+    const minPrice = document.getElementById("f-minPrice").value.trim();
+    const maxPrice = document.getElementById("f-maxPrice").value.trim();
+    const minYear = document.getElementById("f-minYear").value.trim();
+    const maxYear = document.getElementById("f-maxYear").value.trim();
+
+    const params = [];
+    if (model) params.push("model=" + encodeURIComponent(model));
+    if (minPrice) params.push("minPrice=" + encodeURIComponent(minPrice));
+    if (maxPrice) params.push("maxPrice=" + encodeURIComponent(maxPrice));
+    if (minYear) params.push("minYear=" + encodeURIComponent(minYear));
+    if (maxYear) params.push("maxYear=" + encodeURIComponent(maxYear));
+
+    const url = "/api/cars/search" + (params.length ? ("?" + params.join("&")) : "");
+    lastSearchUrl = url;
+
+    const res = await fetch(url);
+    const cars = await res.json();
+
+    allCars = Array.isArray(cars) ? cars : [];
+    const brandsNow = new Set(allCars.map(c => normalizeBrand(c.brand)));
+    if (currentBrand !== "ALL" && !brandsNow.has(currentBrand)) currentBrand = "ALL";
+
+    buildBrandMenu(allCars);
+    applyBrandFilterAndRender();
+  }
+
+  // ----------------------------
+  // UI Render
+  // ----------------------------
+  function renderCars(cars) {
+    const c = document.getElementById("cars-container");
+
+    if (!cars || !cars.length) {
+      c.innerHTML = `<p class="col-span-full text-center text-gray-500">
+        خودرویی یافت نشد
+      </p>`;
+      return;
+    }
+
+    c.innerHTML = cars.map(car => {
+      const img = car?.images?.[0]?.url ? ("/" + car.images[0].url) : "";
+      const statusClass = (car.status === "sold")
+        ? "bg-red-100 text-red-600"
+        : "bg-green-100 text-green-600";
+      const statusText = (car.status === "sold") ? "فروخته‌شده" : "موجود";
+
+      return `
+        <div class="bg-white rounded-2xl shadow hover:shadow-xl transition overflow-hidden">
+          <div class="h-48 bg-gray-200 bg-cover bg-center" style="background-image:url('${img}')"></div>
+
+          <div class="p-4">
+            <h3 class="font-bold text-lg mb-1">${car.brand} ${car.model}</h3>
+            <p class="text-sm text-gray-500 mb-2">سال ${car.year}</p>
+
+            <p class="text-orange-600 font-black text-lg mb-3">
+              ${formatPrice(car.price)} تومان
+            </p>
+
+            <div class="flex justify-between items-center">
+              <span class="text-xs px-3 py-1 rounded-full ${statusClass}">
+                ${statusText}
+              </span>
+
+              <button onclick="location.href='car-details.html?id=${car.id}'"
+                class="text-sm text-orange-500 font-bold hover:underline">
+                مشاهده جزئیات
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  // ----------------------------
+  // Init + Events
+  // ----------------------------
+  document.getElementById("btn-search").addEventListener("click", searchCars);
+  document.getElementById("btn-all").addEventListener("click", () => {
+    // پاک کردن سرچ‌ها (اختیاری ولی تمیزتره)
+    document.getElementById("f-model").value = "";
+    document.getElementById("f-minPrice").value = "";
+    document.getElementById("f-maxPrice").value = "";
+    document.getElementById("f-minYear").value = "";
+    document.getElementById("f-maxYear").value = "";
+    fetchCars("/api/cars");
+  });
+
+  // Enter برای سرچ
+  ["f-model","f-minPrice","f-maxPrice","f-minYear","f-maxYear"].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") searchCars();
+    });
+  });
+
+  // اول صفحه: لود همه
+  fetchCars("/api/cars");
 </script>
 
 </body>

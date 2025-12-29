@@ -1,17 +1,17 @@
 // backend/server.js
-const express = require('express');
-const path = require('path');
-const db = require('./db');
-const cookieParser = require('cookie-parser');
+const express = require("express");
+const path = require("path");
+const db = require("./db");
+const cookieParser = require("cookie-parser");
 
-const authRoutes = require('./routes/authRoutes');
-const requestRoutes = require('./routes/requestRoutes');
-const adminRequestRoutes = require('./routes/adminRequestRoutes');
-const adminRoutes = require('./routes/adminRoutes');
-const adminCarRoutes = require('./routes/adminCarRoutes');
-const dashboardRoutes = require('./routes/dashboardRoutes');
+const authRoutes = require("./routes/authRoutes");
+const requestRoutes = require("./routes/requestRoutes");
+const adminRequestRoutes = require("./routes/adminRequestRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const adminCarRoutes = require("./routes/adminCarRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 
-const { authRequired, adminOnly, customerOnly } = require('./middleware/auth');
+const { authRequired, adminOnly, customerOnly } = require("./middleware/auth");
 
 const app = express();
 const port = 3000;
@@ -24,37 +24,41 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // سرو استاتیک فرانت‌اند
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, "../frontend")));
+
+// سرو عکس‌ها
+app.use("/images", express.static(path.join(__dirname, "../frontend/images")));
 
 // ---------------------------
-// Routes
+// Routes اصلی
 // ---------------------------
-app.use('/api/auth', authRoutes);
-app.use('/api/requests', requestRoutes);
-app.use('/api/admin/requests', adminRequestRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/admin', adminCarRoutes);
-app.use('/api/dashboard', dashboardRoutes); // داشبورد ادمین/یوزر
-app.use('/images', express.static(path.join(__dirname, '../frontend/images')));
+app.use("/api/auth", authRoutes);
+app.use("/api/requests", requestRoutes);
+app.use("/api/admin/requests", adminRequestRoutes);
 
-// تست اتصال دیتابیس
-app.get('/api/test-db', (req, res) => {
-  db.query('SELECT 1 + 1 AS result', (err, rows) => {
-    if (err) return res.status(500).send('Database error');
-    res.send('✅ اتصال موفق! نتیجه: ' + rows[0].result);
-  });
+// روت‌های مدیریتی
+app.use("/api/admin", adminRoutes);
+
+// مدیریت خودروها زیر /api/admin/cars
+app.use("/api/admin/cars", adminCarRoutes);
+
+// داشبورد ادمین زیر /api/admin
+app.use("/api/admin", dashboardRoutes);
+
+// داشبورد مشتری
+app.get("/api/customer/dashboard", authRequired, customerOnly, (req, res) => {
+  res.json({ user: req.user });
 });
 
 // صفحه اصلی
-app.get('/', (req, res) => {
-  res.send('✅ سرور Node.js اجرا شد و به MySQL وصله');
+app.get("/", (req, res) => {
+  res.send("🚗 سرور خودرو۹۰ فعال است!");
 });
 
-
-// ----------------------------------------------------------------
-//   لیست خودروها (خروجی برای cars.html) + عکس‌ها با id + url
-// ----------------------------------------------------------------
-app.get('/api/cars', async (req, res) => {
+// ================================
+//  API: لیست همه خودروها
+// ================================
+app.get("/api/cars", async (req, res) => {
   try {
     const [rows] = await db.promise().query(`
       SELECT 
@@ -72,7 +76,6 @@ app.get('/api/cars', async (req, res) => {
     `);
 
     const cars = {};
-
     rows.forEach(r => {
       if (!cars[r.car_id]) {
         cars[r.car_id] = {
@@ -85,7 +88,6 @@ app.get('/api/cars', async (req, res) => {
           images: []
         };
       }
-
       if (r.image_url) {
         cars[r.car_id].images.push({
           id: r.image_id,
@@ -96,19 +98,20 @@ app.get('/api/cars', async (req, res) => {
 
     res.json(Object.values(cars));
   } catch (err) {
-    console.error('Cars list error:', err);
-    res.status(500).json({ error: 'Database error' });
+    console.error("Cars error:", err);
+    res.status(500).json({ error: "Database error" });
   }
 });
 
-
-// ----------------------------------------------------------------
-//   داشبورد مدیر (با id عکس برای حذف)
-// ----------------------------------------------------------------
-app.get('/api/admin/dashboard', authRequired, adminOnly, async (req, res) => {
+// ================================
+//  جستجو
+// ================================
+app.get("/api/cars/search", async (req, res) => {
   try {
-    const [rows] = await db.promise().query(`
-      SELECT 
+    const { model, minPrice, maxPrice, minYear, maxYear } = req.query;
+
+    let query = `
+      SELECT
         cars.id AS car_id,
         cars.brand,
         cars.model,
@@ -119,11 +122,33 @@ app.get('/api/admin/dashboard', authRequired, adminOnly, async (req, res) => {
         carimages.image_url
       FROM cars
       LEFT JOIN carimages ON cars.id = carimages.car_id
-      ORDER BY cars.id DESC
-    `);
+      WHERE 1=1
+    `;
+
+    const params = [];
+
+    if (model) {
+  query += `
+    AND (
+      cars.model LIKE ? 
+      OR cars.brand LIKE ?
+      OR CONCAT(cars.brand, ' ', cars.model) LIKE ?
+    )
+  `;
+  params.push(`%${model}%`);
+  params.push(`%${model}%`);
+  params.push(`%${model}%`);
+}
+    if (minPrice) { query += " AND cars.price >= ?"; params.push(minPrice); }
+    if (maxPrice) { query += " AND cars.price <= ?"; params.push(maxPrice); }
+    if (minYear) { query += " AND cars.year >= ?"; params.push(minYear); }
+    if (maxYear) { query += " AND cars.year <= ?"; params.push(maxYear); }
+
+    query += " ORDER BY cars.id DESC";
+
+    const [rows] = await db.promise().query(query, params);
 
     const cars = {};
-
     rows.forEach(r => {
       if (!cars[r.car_id]) {
         cars[r.car_id] = {
@@ -136,7 +161,6 @@ app.get('/api/admin/dashboard', authRequired, adminOnly, async (req, res) => {
           images: []
         };
       }
-
       if (r.image_url) {
         cars[r.car_id].images.push({
           id: r.image_id,
@@ -145,27 +169,84 @@ app.get('/api/admin/dashboard', authRequired, adminOnly, async (req, res) => {
       }
     });
 
-    res.json({
-      message: "پنل مدیر",
-      cars: Object.values(cars)
-    });
-
+    res.json(Object.values(cars));
   } catch (err) {
-    console.error("Admin Dashboard Error:", err);
-    return res.status(500).json({ error: "DB error" });
+    console.error("Search error:", err);
+    res.status(500).json({ error: "Database error" });
   }
 });
 
+// ================================
+//  API: جزئیات کامل یک خودرو
+// ================================
+app.get("/api/cars/:id", async (req, res) => {
+  try {
+    const carId = req.params.id;
 
-// ----------------------------------------------------------------
-//   داشبورد مشتری
-// ----------------------------------------------------------------
-app.get('/api/customer/dashboard', authRequired, customerOnly, async (req, res) => {
-  res.json({ message: 'پنل مشتری', user: req.user });
+    const [rows] = await db.promise().query(`
+      SELECT 
+        cars.id AS id,
+        cars.brand,
+        cars.model,
+        cars.year,
+        cars.price,
+        cars.status,
+        cars.mileage,
+        cars.gearbox,
+        cars.fuel,
+        cars.trim,
+        cars.color,
+        cars.interior_color,
+        cars.body_condition,
+        cars.engiine,
+        cars.chassis,
+        cars.origin,
+        cars.description,
+        carimages.image_url
+      FROM cars
+      LEFT JOIN carimages ON cars.id = carimages.car_id
+      WHERE cars.id = ?
+    `, [carId]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "خودرو یافت نشد" });
+    }
+
+    const car = {
+      id: rows[0].id,
+      brand: rows[0].brand,
+      model: rows[0].model,
+      year: rows[0].year,
+      price: rows[0].price,
+      status: rows[0].status,
+      mileage: rows[0].mileage,
+      gearbox: rows[0].gearbox,
+      fuel: rows[0].fuel,
+      trim: rows[0].trim,
+      color: rows[0].color,
+      interior_color: rows[0].interior_color,
+      body_condition: rows[0].body_condition,
+      engiine: rows[0].engiine,
+      chassis: rows[0].chassis,
+      origin: rows[0].origin,
+      description: rows[0].description,
+      images: []
+    };
+
+    rows.forEach(r => {
+      if (r.image_url) car.images.push(r.image_url);
+    });
+
+    res.json(car);
+
+  } catch (err) {
+    console.error("Car details error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
 });
 
 // ---------------------------
-// Start Server
+// Start server
 // ---------------------------
 app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}`);

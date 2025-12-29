@@ -1,342 +1,877 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html class="light" dir="rtl" lang="fa">
 <head>
-  <meta charset="UTF-8">
-  <title>داشبورد مدیر | خودرو۹۰</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>پنل مدیریت دایرکتوری خودرو</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet"/>
+  <!-- Material Symbols -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <!-- Theme Configuration -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#FF6700",
+            "primary-dark": "#e65c00",
+            "primary-light": "#ffe0cc",
+            "background-light": "#f8f7f5",
+            "background-dark": "#23170f",
+            "text-main": "#1d130c",
+            "text-secondary": "#6B7280",
+          },
+          fontFamily: {
+            "display": ["Vazirmatn", "sans-serif"],
+            "sans": ["Vazirmatn", "sans-serif"],
+          },
+          borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
 
   <style>
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .active-nav-item .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* مودال‌ها (افزودن / ویرایش خودرو) */
     .modal {
       position: fixed;
       top: 0; left: 0;
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       background: rgba(0,0,0,.6);
-      display: none;
+      display: none;              /* با js میشه flex */
       justify-content: center;
-      align-items: center;
-      z-index: 9999;
+      align-items: flex-start;
+      overflow-y: auto;
+      padding-top: 40px;
+      z-index: 50;
     }
+
     .modal-content {
       background: #fff;
       padding: 20px;
-      border-radius: 10px;
-      width: 350px;
-      text-align: center;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-content label {
+      display: block;
+      margin-top: 8px;
+      margin-bottom: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .modal-content input,
+    .modal-content select,
+    .modal-content textarea {
+      width: 100%;
+      border-radius: 0.5rem;
+      border: 1px solid #e5e7eb;
+      padding: 6px 10px;
+      font-size: 0.9rem;
+    }
+
+    .button-like {
+      background: #FF6700;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .button-like:hover {
+      background: #e65c00;
     }
   </style>
 </head>
 
-<body>
+<body class="bg-background-light dark:bg-background-dark text-text-main font-display antialiased overflow-hidden">
+<div class="flex h-screen w-full overflow-hidden">
 
-<header class="main-header">
-  <div class="logo">پنل مدیریت</div>
-  <nav class="main-nav">
-    <button id="logoutBtn" class="nav-item button-like">خروج</button>
-  </nav>
-</header>
+  <!-- Side Navigation -->
+  <aside class="w-64 bg-white dark:bg-[#1a1a1a] border-l border-[#f0f0f0] dark:border-[#333] flex flex-col justify-between hidden md:flex z-20 shadow-sm h-full">
+    <div class="flex flex-col h-full">
+      <!-- User Profile Summary -->
+      <div class="p-6 border-b border-[#f0f0f0] dark:border-[#333]">
+        <div class="flex items-center gap-3">
+          <div class="bg-center bg-no-repeat bg-cover rounded-full h-12 w-12 border-2 border-primary"
+               style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCWaLMkFIBND5mNO24ahDAGq2RIE5JSMhOexcu7lT48inhb-QrV0RnrRNa-OKchXltHqWYvxnbGPgVSzuyixM52EPn9tDWzExoyeJ3uvLkeIbGopryF9aIBRgkh_jvNGJ9fAOj1t5XwQwc6Nd-vVoXbsgpX0qBmY0T5Np-LUqxd6YqzF8Ym4sXqe75Cdkc1-olH8xFHwaMDmPpxCMAQ1T4iIQCbleYIXK6ps49r01LjtjK388x2YqXZklWxD7c2WYdribHxMyyVt6M");'>
+          </div>
+          <div class="flex flex-col">
+            <h1 class="text-text-main dark:text-white text-base font-bold leading-tight">امیرعلی روان بد</h1>
+            <p class="text-text-secondary text-xs font-normal mt-1">مدیر کل سیستم</p>
+          </div>
+        </div>
+      </div>
 
-<main class="cars-page">
-  <h1>مدیریت خودروها</h1>
+      <!-- Navigation Links -->
+      <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-secondary hover:bg-gray-50 dark:hover:bg-[#2a2a2a] transition-colors group" href="#">
+          <span class="material-symbols-outlined text-gray-400 group-hover:text-primary transition-colors">dashboard</span>
+          <span class="text-sm font-medium group-hover:text-primary dark:text-gray-300">داشبورد</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary active-nav-item" href="#">
+          <span class="material-symbols-outlined">directions_car</span>
+          <span class="text-sm font-bold">مدیریت خودروها</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-secondary hover:bg-gray-50 dark:hover:bg-[#2a2a2a] transition-colors group" href="manage-admins.html">
+          <span class="material-symbols-outlined text-gray-400 group-hover:text-primary transition-colors">group</span>
+          <span class="text-sm font-medium group-hover:text-primary dark:text-gray-300">مدیریت مدیران</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-secondary hover:bg-gray-50 dark:hover:bg-[#2a2a2a] transition-colors group" href="admin-requests.html">
+          <span class="material-symbols-outlined text-gray-400 group-hover:text-primary transition-colors">receipt_long</span>
+          <span class="text-sm font-medium group-hover:text-primary dark:text-gray-300">درخواست‌های خرید</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-secondary hover:bg-gray-50 dark:hover:bg-[#2a2a2a] transition-colors group" href="#">
+          <span class="material-symbols-outlined text-gray-400 group-hover:text-primary transition-colors">settings</span>
+          <span class="text-sm font-medium group-hover:text-primary dark:text-gray-300">تنظیمات</span>
+        </a>
+      </nav>
 
-  <button onclick="openAddCarModal()" class="button-like" style="margin-bottom:20px;">
-    افزودن خودروی جدید
-  </button>
+      <!-- Logout -->
+      <div class="p-4 border-t border-[#f0f0f0] dark:border-[#333]">
+        <button id="logoutBtn" class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors w-full text-right">
+          <span class="material-symbols-outlined">logout</span>
+          <span class="text-sm font-medium">خروج از حساب</span>
+        </button>
+      </div>
+    </div>
+  </aside>
 
-  <div style="margin-bottom:20px; display:flex; gap:10px;">
-    <a href="admin-requests.html" class="button-like">درخواست‌های خرید</a>
-    <a href="manage-admins.html" class="button-like">مدیریت مدیران</a>
-  </div>
+  <!-- Main Content Area -->
+  <main class="flex-1 flex flex-col min-w-0 bg-[#f8f9fa] dark:bg-[#121212] overflow-hidden relative">
 
-  <div id="cars-container" class="cars-container"></div>
-</main>
+    <!-- Top Header -->
+    <header class="bg-white dark:bg-[#1a1a1a] h-16 border-b border-[#f0f0f0] dark:border-[#333] flex items-center justify-between px-6 shrink-0 z-10">
+      <!-- Search Bar -->
+      <div class="flex-1 max-w-lg hidden sm:block">
+        <div class="relative group">
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <span class="material-symbols-outlined text-gray-400">search</span>
+          </div>
+          <input class="block w-full pr-10 pl-3 py-2 border border-gray-200 dark:border-[#444] rounded-lg leading-5 bg-gray-50 dark:bg-[#222] text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-all"
+                 placeholder="جستجو در خودروها، کاربران..." type="text"/>
+        </div>
+      </div>
+
+      <!-- Right Header Actions -->
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 text-gray-400 hover:text-gray-500 dark:text-gray-300 dark:hover:text-white transition-colors">
+          <span class="material-symbols-outlined">notifications</span>
+          <span class="absolute top-1.5 left-1.5 block h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white dark:ring-[#1a1a1a]"></span>
+        </button>
+        <button class="md:hidden p-2 text-gray-600">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Scrollable Content -->
+    <div class="flex-1 overflow-y-auto p-6 md:p-8 scroll-smooth">
+
+      <!-- Breadcrumbs -->
+      <nav aria-label="Breadcrumb" class="flex mb-6">
+        <ol class="inline-flex items-center space-x-1 space-x-reverse md:space-x-3 md:space-x-reverse">
+          <li class="inline-flex items-center">
+            <a class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-primary dark:text-gray-400" href="#">
+              <span class="material-symbols-outlined text-[18px] ml-1">home</span>
+              خانه
+            </a>
+          </li>
+          <li>
+            <div class="flex items-center">
+              <span class="material-symbols-outlined text-gray-400 text-sm mx-1">chevron_left</span>
+              <span class="ml-1 text-sm font-medium text-primary md:ml-2">مدیریت خودروها</span>
+            </div>
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Page Heading & Actions -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">لیست خودروها</h2>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">مدیریت و بررسی آگهی‌های ثبت شده در سیستم</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a href="admin-requests.html"
+             class="inline-flex items-center justify-center px-3 py-2 border border-gray-200 dark:border-[#444] text-xs sm:text-sm font-medium rounded-lg bg-white dark:bg-[#1a1a1a] text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#222]">
+            <span class="material-symbols-outlined ml-1 text-[18px]">receipt_long</span>
+            درخواست‌های خرید
+          </a>
+          <a href="manage-admins.html"
+             class="inline-flex items-center justify-center px-3 py-2 border border-gray-200 dark:border-[#444] text-xs sm:text-sm font-medium rounded-lg bg-white dark:bg-[#1a1a1a] text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#222]">
+            <span class="material-symbols-outlined ml-1 text-[18px]">group</span>
+            مدیریت مدیران
+          </a>
+          <button
+            onclick="openAddCarModal()"
+            class="inline-flex items-center justify-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
+            <span class="material-symbols-outlined ml-2 text-[20px]">add</span>
+            افزودن خودروی جدید
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <!-- Stat 1 -->
+        <div class="bg-white dark:bg-[#1a1a1a] overflow-hidden shadow-sm rounded-xl border border-gray-100 dark:border-[#333] p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
+              <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">inventory_2</span>
+            </div>
+            <div class="mr-4 flex-1">
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">کل خودروها</dt>
+              <dd id="stat-total-cars" class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">0</dd>
+            </div>
+          </div>
+        </div>
+        <!-- Stat 2 -->
+        <div class="bg-white dark:bg-[#1a1a1a] overflow-hidden shadow-sm rounded-xl border border-gray-100 dark:border-[#333] p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-3">
+              <span class="material-symbols-outlined text-yellow-600 dark:text-yellow-400">pending</span>
+            </div>
+            <div class="mr-4 flex-1">
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">در انتظار تایید</dt>
+              <dd id="stat-pending-cars" class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">0</dd>
+            </div>
+          </div>
+        </div>
+        <!-- Stat 3 -->
+        <div class="bg-white dark:bg-[#1a1a1a] overflow-hidden shadow-sm rounded-xl border border-gray-100 dark:border-[#333] p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
+              <span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
+            </div>
+            <div class="mr-4 flex-1">
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">موجود</dt>
+              <dd id="stat-available-cars" class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">0</dd>
+            </div>
+          </div>
+        </div>
+        <!-- Stat 4 -->
+        <div class="bg-white dark:bg-[#1a1a1a] overflow-hidden shadow-sm rounded-xl border border-gray-100 dark:border-[#333] p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 bg-red-50 dark:bg-red-900/20 rounded-lg p-3">
+              <span class="material-symbols-outlined text-red-600 dark:text-red-400">cancel</span>
+            </div>
+            <div class="mr-4 flex-1">
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">فروخته‌شده</dt>
+              <dd id="stat-sold-cars" class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">0</dd>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters & Table Section -->
+      <div class="bg-white dark:bg-[#1a1a1a] shadow-sm rounded-xl border border-gray-100 dark:border-[#333] overflow-hidden">
+
+        <!-- Filters Toolbar -->
+        <div class="p-4 border-b border-gray-100 dark:border-[#333] flex flex-col sm:flex-row gap-4 justify-between items-center bg-gray-50/50 dark:bg-[#222]/50">
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">فیلتر وضعیت:</span>
+            <select id="status-filter" class="form-select text-sm border-gray-300 dark:border-[#444] dark:bg-[#2a2a2a] dark:text-white rounded-lg focus:border-primary focus:ring-primary">
+              <option value="">همه وضعیت‌ها</option>
+              <option value="available">موجود</option>
+              <option value="sold">فروخته‌شده</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <button class="flex items-center justify-center px-3 py-2 text-sm text-gray-600 dark:text-gray-300 bg-white dark:bg-[#2a2a2a] border border-gray-300 dark:border-[#444] rounded-lg hover:bg-gray-50 dark:hover:bg-[#333]">
+              <span class="material-symbols-outlined text-[18px] ml-1">filter_list</span>
+              فیلتر پیشرفته
+            </button>
+            <button class="flex items-center justify-center px-3 py-2 text-sm text-gray-600 dark:text-gray-300 bg-white dark:bg-[#2a2a2a] border border-gray-300 dark:border-[#444] rounded-lg hover:bg-gray-50 dark:hover:bg-[#333]">
+              <span class="material-symbols-outlined text-[18px] ml-1">download</span>
+              خروجی اکسل
+            </button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 dark:divide-[#333]">
+            <thead class="bg-gray-50 dark:bg-[#222]">
+            <tr>
+              <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">خودرو</th>
+              <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">مالک</th>
+              <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">قیمت (تومان)</th>
+              <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">تاریخ ثبت</th>
+              <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">وضعیت</th>
+              <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">عملیات</th>
+            </tr>
+            </thead>
+            <tbody id="cars-tbody" class="bg-white dark:bg-[#1a1a1a] divide-y divide-gray-200 dark:divide-[#333]">
+            <!-- ردیف‌ها داینامیک با JS پر می‌شوند -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination (فعلاً نمایشی) -->
+        <div class="px-6 py-4 bg-white dark:bg-[#1a1a1a] border-t border-gray-100 dark:border-[#333] flex items-center justify-between">
+          <div class="text-sm text-gray-500 dark:text-gray-400">
+            <span id="pagination-text">نمایش 0 تا 0 از 0 نتیجه</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="p-2 border border-gray-200 dark:border-[#444] rounded-lg text-gray-500 hover:bg-gray-50 dark:hover:bg-[#333] disabled:opacity-50" disabled>
+              <span class="material-symbols-outlined text-sm">chevron_right</span>
+            </button>
+            <button class="px-3 py-1 border border-primary bg-primary text-white rounded-lg text-sm font-medium">1</button>
+            <button class="px-3 py-1 border border-gray-200 dark:border-[#444] rounded-lg text-sm font-medium hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-[#333]">2</button>
+            <span class="text-gray-400">...</span>
+            <button class="px-3 py-1 border border-gray-200 dark:border-[#444] rounded-lg text-sm font-medium hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-[#333]">15</button>
+            <button class="p-2 border border-gray-200 dark:border-[#444] rounded-lg text-gray-500 hover:bg-gray-50 dark:hover:bg-[#333]">
+              <span class="material-symbols-outlined text-sm">chevron_left</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
 
 <!-- مودال افزودن خودرو جدید -->
 <div id="addCarModal" class="modal">
   <div class="modal-content">
-    <h3>افزودن خودرو</h3>
-
+    <h3 class="text-lg font-bold mb-4">افزودن خودرو</h3>
     <form id="addCarForm">
-
       <label>برند:</label>
-      <input id="add-brand" required><br><br>
+      <input id="add-brand" required>
 
       <label>مدل:</label>
-      <input id="add-model" required><br><br>
+      <input id="add-model" required>
 
       <label>سال (میلادی):</label>
-      <input id="add-year" type="number" required><br><br>
+      <input id="add-year" type="number" required>
 
       <label>قیمت:</label>
-      <input id="add-price" type="text" required><br><br>
+      <input id="add-price" type="text" required>
 
       <label>عکس خودرو:</label>
-      <input id="add-image" type="file" accept="image/*"><br><br>
+      <input id="add-image" type="file" accept="image/*">
 
-      <button type="submit" class="button-like">ثبت خودرو</button>
-      <button type="button" onclick="closeAddCarModal()" style="margin-top:10px;">بستن</button>
+      <div class="mt-4 flex gap-2 justify-end">
+        <button type="button" onclick="closeAddCarModal()" class="px-3 py-2 rounded-lg border text-sm">بستن</button>
+        <button type="submit" class="button-like">ثبت خودرو</button>
+      </div>
     </form>
   </div>
 </div>
 
-
 <!-- مودال ویرایش خودرو -->
 <div id="editModal" class="modal">
   <div class="modal-content">
-    <h3>ویرایش خودرو</h3>
+    <h3 class="text-lg font-bold mb-4">ویرایش خودرو</h3>
 
     <form id="editForm">
-
       <input type="hidden" id="edit-id">
 
       <label>برند:</label>
-      <input id="edit-brand" required><br><br>
+      <input id="edit-brand" required>
 
       <label>مدل:</label>
-      <input id="edit-model" required><br><br>
+      <input id="edit-model" required>
 
       <label>سال (میلادی):</label>
-      <input id="edit-year" type="number" required><br><br>
+      <input id="edit-year" type="number" required>
 
       <label>قیمت:</label>
-      <input id="edit-price" type="text" required><br><br>
+      <input id="edit-price" type="text" required>
+
+      <label>کارکرد:</label>
+      <input id="edit-mileage" type="text">
+
+      <label>گیربکس:</label>
+      <input id="edit-gearbox" type="text">
+
+      <label>سوخت:</label>
+      <input id="edit-fuel" type="text">
+
+      <label>تیپ:</label>
+      <input id="edit-trim" type="text">
+
+      <label>رنگ بدنه:</label>
+      <input id="edit-color" type="text">
+
+      <label>رنگ داخل:</label>
+      <input id="edit-interior_color" type="text">
+
+      <label>وضعیت بدنه:</label>
+      <input id="edit-body_condition" type="text">
+
+      <label>موتور:</label>
+      <input id="edit-engiine" type="text">
+
+      <label>شاسی:</label>
+      <input id="edit-chassis" type="text">
+
+      <label>کشور سازنده:</label>
+      <input id="edit-origin" type="text">
+
+      <label>توضیحات فروشنده:</label>
+      <textarea id="edit-description" rows="3"></textarea>
 
       <label>وضعیت:</label>
       <select id="edit-status">
         <option value="available">موجود</option>
         <option value="sold">فروخته‌شده</option>
-      </select><br><br>
+      </select>
 
-      <button type="submit" class="button-like">ذخیره تغییرات</button>
-      <button type="button" onclick="closeEditModal()" style="margin-top:10px;">بستن</button>
+      <div class="mt-4 flex gap-2 justify-between flex-wrap">
+        <button type="button" onclick="closeEditModal()" class="px-3 py-2 rounded-lg border text-sm">بستن</button>
+        <div class="flex gap-2">
+          <button type="button" onclick="markSoldFromModal()" class="px-3 py-2 rounded-lg border border-amber-500 text-amber-600 text-sm">
+            علامت‌گذاری فروخته‌شده
+          </button>
+          <button type="submit" class="button-like">ذخیره تغییرات</button>
+        </div>
+      </div>
     </form>
   </div>
 </div>
 
-
 <script>
+  let allCars = [];
 
-// تبدیل سال میلادی به شمسی
-function toShamsiYear(gYear) {
-  if (!gYear) return "-";
-  const d = new Date(`${gYear}-01-01`);
-  return d.toLocaleDateString("fa-IR").split("/")[0];
-}
+  function toShamsiYear(gYear) {
+    if (!gYear) return "-";
+    const d = new Date(String(gYear) + "-01-01");
+    return d.toLocaleDateString("fa-IR").split("/")[0];
+  }
 
-// بارگذاری داشبورد
-async function loadAdminDashboard() {
-  const res = await fetch("/api/admin/dashboard", { credentials:"include" });
-  const data = await res.json();
+  function formatPrice(price) {
+    const n = Number(price || 0);
+    if (!n) return "0";
+    return n.toLocaleString("fa-IR");
+  }
 
-  window.allCars = data.cars;
+  function formatDate(dateStr) {
+    if (!dateStr) return "-";
+    const d = new Date(dateStr);
+    if (isNaN(d)) return "-";
+    return d.toLocaleDateString("fa-IR");
+  }
 
-  const container = document.getElementById("cars-container");
+  function getFirstImage(car) {
+    if (car.images && car.images.length && car.images[0].url) {
+      return "/" + car.images[0].url;
+    }
+    return "";
+  }
 
-  container.innerHTML = data.cars.map(c => `
-    <div class="car-card">
-      <h3>${c.brand} ${c.model}</h3>
-      <p>سال: ${toShamsiYear(c.year)}</p>
-      <p>قیمت: ${Number(c.price).toLocaleString()} تومان</p>
-      <p>وضعیت: ${c.status === "available" ? "موجود" : "فروخته‌شده"}</p>
+  function openAddCarModal() {
+    document.getElementById("addCarModal").style.display = "flex";
+  }
 
-      <div class="car-images">
-        ${
-          c.images && c.images.length
-            ? c.images.map(imgObj => `
-              <div style="position:relative; display:inline-block; margin:5px;">
-                <img src="/${imgObj.url}" 
-                     style="width:90px; height:70px; object-fit:cover; border-radius:6px;">
+  function closeAddCarModal() {
+    document.getElementById("addCarModal").style.display = "none";
+  }
 
-                <button onclick="deleteImage(${imgObj.id})"
-                  style="
-                    position:absolute;
-                    top:-5px;
-                    right:-5px;
-                    background:red;
-                    color:white;
-                    border:none;
-                    font-size:12px;
-                    padding:2px 5px;
-                    border-radius:50%;
-                    cursor:pointer;
-                  ">
-                  ×
-                </button>
-              </div>
-            `).join('')
-            : "<p>بدون عکس</p>"
-        }
-      </div>
+  function openEditModal(id) {
+    const car = allCars.find(c => c.id === id);
+    if (!car) return;
 
-      <button onclick="openEditModal(${c.id})" class="button-like" style="margin-top:10px;">ویرایش</button>
+    document.getElementById("edit-id").value = car.id;
+    document.getElementById("edit-brand").value = car.brand || "";
+    document.getElementById("edit-model").value = car.model || "";
+    document.getElementById("edit-year").value = car.year || "";
+    document.getElementById("edit-price").value = car.price || "";
 
-<button onclick="deleteCar(${c.id})"
-  style="margin-top:10px;background:red;color:white;padding:6px 10px;border:none;border-radius:6px;cursor:pointer;">
-  حذف
-</button>
+    document.getElementById("edit-mileage").value = car.mileage || "";
+    document.getElementById("edit-gearbox").value = car.gearbox || "";
+    document.getElementById("edit-fuel").value = car.fuel || "";
+    document.getElementById("edit-trim").value = car.trim || "";
+    document.getElementById("edit-color").value = car.color || "";
+    document.getElementById("edit-interior_color").value = car.interior_color || "";
+    document.getElementById("edit-body_condition").value = car.body_condition || "";
+    document.getElementById("edit-engiine").value = car.engiine || "";
+    document.getElementById("edit-chassis").value = car.chassis || "";
+    document.getElementById("edit-origin").value = car.origin || "";
+    document.getElementById("edit-description").value = car.description || "";
+    document.getElementById("edit-status").value = car.status || "available";
 
-${
-  c.status === "available"
-    ? `<button onclick="markSold(${c.id})"
-         class="button-like"
-         style="margin-top:10px; background:#f39c12; border:none;">
-         علامت‌گذاری فروخته‌شده
-       </button>`
-    : `<span style="display:inline-block; margin-top:10px; color:#888;">(خودرو فروخته شده است)</span>`
-}
+    document.getElementById("editModal").style.display = "flex";
+  }
 
-<button onclick="openAddImage(${c.id})" class="button-like" style="margin-top:10px;">افزودن عکس</button>
-    </div>
-  `).join('');
-}
+  function closeEditModal() {
+    document.getElementById("editModal").style.display = "none";
+  }
 
-// حذف خودرو
-async function deleteCar(id) {
-  if (!confirm("حذف خودرو؟")) return;
+  // ثبت خودرو جدید
+  document.getElementById("addCarForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const res = await fetch(`/api/admin/cars/${id}`, {
-    method: "DELETE",
-    credentials: "include"
-  });
-
-  alert((await res.json()).message);
-  loadAdminDashboard();
-}
-
-// علامت‌گذاری خودرو به عنوان فروخته‌شده
-async function markSold(id) {
-  if (!confirm("آیا مطمئن هستید که این خودرو فروخته شده است؟")) return;
-
-  const res = await fetch(`/api/admin/cars/${id}/mark-sold`, {
-    method: "POST",
-    credentials: "include"
-  });
-
-  const data = await res.json();
-  alert(data.message);
-  loadAdminDashboard();
-}
-
-// باز کردن مودال ویرایش
-function openEditModal(id) {
-  const car = window.allCars.find(c => c.id === id);
-
-  document.getElementById("edit-id").value = car.id;
-  document.getElementById("edit-brand").value = car.brand;
-  document.getElementById("edit-model").value = car.model;
-  document.getElementById("edit-year").value = car.year;
-  document.getElementById("edit-price").value = car.price;
-  document.getElementById("edit-status").value = car.status;
-
-  document.getElementById("editModal").style.display = "flex";
-}
-
-function closeEditModal() {
-  document.getElementById("editModal").style.display = "none";
-}
-
-// ذخیره ویرایش
-document.getElementById("editForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const id = document.getElementById("edit-id").value;
-
-  const payload = {
-    brand: document.getElementById("edit-brand").value,
-    model: document.getElementById("edit-model").value,
-    year: document.getElementById("edit-year").value,
-    price: document.getElementById("edit-price").value,
-    status: document.getElementById("edit-status").value
-  };
-
-  const res = await fetch(`/api/admin/cars/${id}`, {
-    method: "PUT",
-    credentials:"include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
-
-  alert((await res.json()).message);
-  closeEditModal();
-  loadAdminDashboard();
-});
-
-// افزودن عکس جدید
-function openAddImage(carId) {
-  const input = document.createElement("input");
-  input.type = "file";
-  input.accept = "image/*";
-
-  input.onchange = async () => {
     const formData = new FormData();
-    formData.append("image", input.files[0]);
+    formData.append("brand", document.getElementById("add-brand").value);
+    formData.append("model", document.getElementById("add-model").value);
+    formData.append("year", document.getElementById("add-year").value);
+    formData.append("price", document.getElementById("add-price").value);
 
-    const res = await fetch(`/api/admin/cars/${carId}/image`, {
+    const imageFile = document.getElementById("add-image").files[0];
+    if (imageFile) formData.append("image", imageFile);
+
+    const res = await fetch("/api/admin/cars", {
       method: "POST",
-      credentials:"include",
+      credentials: "include",
       body: formData
     });
 
-    alert((await res.json()).message);
+    const data = await res.json();
+    alert(data.message || (res.ok ? "خودرو ثبت شد" : "خطا در ثبت خودرو"));
+    if (res.ok) {
+      closeAddCarModal();
+      loadAdminDashboard();
+    }
+  });
+
+  // ذخیره ویرایش
+  document.getElementById("editForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const id = document.getElementById("edit-id").value;
+
+    const payload = {
+      brand: document.getElementById("edit-brand").value,
+      model: document.getElementById("edit-model").value,
+      year: document.getElementById("edit-year").value,
+      price: document.getElementById("edit-price").value,
+      status: document.getElementById("edit-status").value,
+      mileage: document.getElementById("edit-mileage").value,
+      gearbox: document.getElementById("edit-gearbox").value,
+      fuel: document.getElementById("edit-fuel").value,
+      trim: document.getElementById("edit-trim").value,
+      color: document.getElementById("edit-color").value,
+      interior_color: document.getElementById("edit-interior_color").value,
+      body_condition: document.getElementById("edit-body_condition").value,
+      engiine: document.getElementById("edit-engiine").value,
+      chassis: document.getElementById("edit-chassis").value,
+      origin: document.getElementById("edit-origin").value,
+      description: document.getElementById("edit-description").value
+    };
+
+    const res = await fetch(`/api/admin/cars/${id}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    alert(data.message || (res.ok ? "تغییرات ذخیره شد" : "خطا در ذخیره تغییرات"));
+    if (res.ok) {
+      closeEditModal();
+      loadAdminDashboard();
+    }
+  });
+
+  // از داخل مودال، دکمه "علامت‌گذاری فروخته‌شده"
+  async function markSoldFromModal() {
+    const id = document.getElementById("edit-id").value;
+    if (!id) return;
+    await markSold(id);
+  }
+
+  // حذف خودرو
+  async function deleteCar(id) {
+    if (!confirm("حذف خودرو؟")) return;
+
+    const res = await fetch(`/api/admin/cars/${id}`, {
+      method: "DELETE",
+      credentials: "include"
+    });
+
+    const data = await res.json();
+    alert(data.message || data.error || (res.ok ? "خودرو حذف شد" : "خطا در حذف خودرو"));
+    if (res.ok) {
+      loadAdminDashboard();
+    }
+  }
+
+  // علامت‌گذاری خودرو به عنوان فروخته‌شده
+  async function markSold(id) {
+    if (!confirm("آیا مطمئن هستید که این خودرو فروخته شده است؟")) return;
+
+    const res = await fetch(`/api/admin/cars/${id}/mark-sold`, {
+      method: "POST",
+      credentials: "include"
+    });
+
+    const data = await res.json();
+    alert(data.message || (res.ok ? "وضعیت به فروخته‌شده تغییر کرد" : "خطا در تغییر وضعیت"));
+    if (res.ok) {
+      closeEditModal();
+      loadAdminDashboard();
+    }
+  }
+
+  // افزودن عکس جدید
+  function openAddImage(carId) {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.onchange = async () => {
+      const formData = new FormData();
+      formData.append("image", input.files[0]);
+
+      const res = await fetch(`/api/admin/cars/${carId}/image`, {
+        method: "POST",
+        credentials:"include",
+        body: formData
+      });
+
+      const data = await res.json();
+      alert(data.message || (res.ok ? "عکس ثبت شد" : "خطا در ثبت عکس"));
+      if (res.ok) {
+        loadAdminDashboard();
+      }
+    };
+
+    input.click();
+  }
+
+  // حذف عکس (فعلاً UI مستقیم نداره، ولی تابع رو نگه داشتیم)
+  async function deleteImage(imageId) {
+    if (!confirm("آیا می‌خواهید این عکس حذف شود؟")) return;
+
+    const res = await fetch(`/api/admin/cars/image/${imageId}`, {
+      method: "DELETE",
+      credentials: "include"
+    });
+
+    const data = await res.json();
+    alert(data.message || (res.ok ? "عکس حذف شد" : "خطا در حذف عکس"));
+    if (res.ok) {
+      loadAdminDashboard();
+    }
+  }
+
+  // پر کردن جدول
+  function renderCarsTable(cars) {
+    const tbody = document.getElementById("cars-tbody");
+    const statusFilter = document.getElementById("status-filter").value;
+
+    let filtered = cars;
+    if (statusFilter) {
+      filtered = cars.filter(c => c.status === statusFilter);
+    }
+
+    if (!filtered.length) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="px-6 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+            خودرویی یافت نشد.
+          </td>
+        </tr>
+      `;
+    } else {
+      tbody.innerHTML = filtered.map(c => {
+        const img = getFirstImage(c);
+        const year = c.year || "";
+        const owner = c.owner_name || c.owner || "نامشخص";
+        const createdAt = formatDate(c.created_at);
+
+        let statusLabel = "نامشخص";
+        let statusClass = "bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-300";
+
+        if (c.status === "available") {
+          statusLabel = "موجود";
+          statusClass = "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+        } else if (c.status === "sold") {
+          statusLabel = "فروخته‌شده";
+          statusClass = "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
+        }
+
+        return `
+          <tr class="hover:bg-gray-50 dark:hover:bg-[#222] transition-colors">
+            <!-- خودرو -->
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="h-10 w-16 flex-shrink-0 rounded-md bg-gray-100 overflow-hidden relative">
+                  ${
+                    img
+                      ? `<img src="${img}" class="h-full w-full object-cover" alt="car-image">`
+                      : `<div class="h-full w-full flex items-center justify-center text-xs text-gray-400">بدون تصویر</div>`
+                  }
+                </div>
+                <div class="mr-4">
+                  <div class="text-sm font-bold text-gray-900 dark:text-white">
+                    ${(c.brand || "") + " " + (c.model || "")}
+                  </div>
+                  <div class="text-xs text-gray-500">
+                    ${year ? `مدل ${year}` : ""}
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <!-- مالک -->
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600">
+                  ${owner && owner.length ? owner[0] : "؟"}
+                </div>
+                <div class="mr-2 text-sm text-gray-900 dark:text-gray-300">
+                  ${owner}
+                </div>
+              </div>
+            </td>
+
+            <!-- قیمت -->
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900 dark:text-gray-300 font-medium">
+                ${formatPrice(c.price)}
+              </div>
+            </td>
+
+            <!-- تاریخ ثبت -->
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+              ${createdAt}
+            </td>
+
+            <!-- وضعیت -->
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
+                ${statusLabel}
+              </span>
+            </td>
+
+            <!-- عملیات -->
+            <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+              <div class="flex items-center justify-end gap-2">
+                <button
+                  class="text-gray-500 hover:text-primary dark:hover:text-primary p-1 rounded hover:bg-gray-100 dark:hover:bg-[#333]"
+                  title="ویرایش"
+                  onclick="openEditModal(${c.id})">
+                  <span class="material-symbols-outlined text-[20px]">edit</span>
+                </button>
+
+                <button
+                  class="text-blue-600 hover:text-blue-900 dark:hover:text-blue-400 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                  title="افزودن عکس"
+                  onclick="openAddImage(${c.id})">
+                  <span class="material-symbols-outlined text-[20px]">add_photo_alternate</span>
+                </button>
+
+                ${
+                  c.status === "available"
+                    ? `<button
+                        class="text-amber-600 hover:text-amber-900 dark:hover:text-amber-400 p-1 rounded hover:bg-amber-50 dark:hover:bg-amber-900/20"
+                        title="علامت‌گذاری فروخته‌شده"
+                        onclick="markSold(${c.id})">
+                        <span class="material-symbols-outlined text-[20px]">sell</span>
+                       </button>`
+                    : ""
+                }
+
+                <button
+                  class="text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20"
+                  title="حذف"
+                  onclick="deleteCar(${c.id})">
+                  <span class="material-symbols-outlined text-[20px]">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    const total = cars.length;
+    const from = total ? 1 : 0;
+    const to = filtered.length;
+    document.getElementById("pagination-text").textContent =
+      `نمایش ${from} تا ${to} از ${total} نتیجه`;
+  }
+
+  async function loadAdminDashboard() {
+    try {
+      const res = await fetch("/api/admin/dashboard", { credentials: "include" });
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "خطا در دریافت اطلاعات داشبورد");
+        return;
+      }
+
+      allCars = data.cars || [];
+
+      // آمار
+      const total = allCars.length;
+      const available = allCars.filter(c => c.status === "available").length;
+      const sold = allCars.filter(c => c.status === "sold").length;
+
+      document.getElementById("stat-total-cars").textContent = total;
+      document.getElementById("stat-available-cars").textContent = available;
+      document.getElementById("stat-sold-cars").textContent = sold;
+      document.getElementById("stat-pending-cars").textContent = 0; // فعلاً نداریم
+
+      renderCarsTable(allCars);
+    } catch (err) {
+      console.error(err);
+      alert("خطای غیرمنتظره در دریافت اطلاعات داشبورد");
+    }
+  }
+
+  // تغییر فیلتر وضعیت
+  document.getElementById("status-filter").addEventListener("change", () => {
+    renderCarsTable(allCars);
+  });
+
+  // خروج
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
+    await fetch("/api/auth/logout", { method: "POST", credentials:"include" });
+    location.href = "login.html";
+  });
+
+  // شروع
+  document.addEventListener("DOMContentLoaded", () => {
     loadAdminDashboard();
-  };
-
-  input.click();
-}
-
-// حذف عکس
-async function deleteImage(imageId) {
-  if (!confirm("آیا می‌خواهید این عکس حذف شود؟")) return;
-
-  const res = await fetch(`/api/admin/cars/image/${imageId}`, {
-    method: "DELETE",
-    credentials: "include"
   });
-
-  alert((await res.json()).message);
-  loadAdminDashboard();
-}
-
-// مودال افزودن خودرو
-function openAddCarModal() {
-  document.getElementById("addCarModal").style.display = "flex";
-}
-function closeAddCarModal() {
-  document.getElementById("addCarModal").style.display = "none";
-}
-
-// ثبت خودرو جدید همراه عکس
-document.getElementById("addCarForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const formData = new FormData();
-  formData.append("brand", document.getElementById("add-brand").value);
-  formData.append("model", document.getElementById("add-model").value);
-  formData.append("year", document.getElementById("add-year").value);
-  formData.append("price", document.getElementById("add-price").value);
-
-  const imageFile = document.getElementById("add-image").files[0];
-  if (imageFile) formData.append("image", imageFile);
-
-  const res = await fetch("/api/admin/cars", {
-    method: "POST",
-    credentials:"include",
-    body: formData
-  });
-
-  alert((await res.json()).message);
-  closeAddCarModal();
-  loadAdminDashboard();
-});
-
-// خروج
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  await fetch("/api/auth/logout", { method: "POST", credentials:"include" });
-  location.href = "login.html";
-});
-
-// اجرا
-loadAdminDashboard();
-
 </script>
 
 </body>
